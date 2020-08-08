@@ -35,9 +35,45 @@
 
             // Display tweets
             data['tweets'].forEach(tweet => {
-                let li_Element = document.createElement('li');
-                li_Element.innerHTML = tweet['content'];
-                tweetsElement.insertAdjacentElement('beforeend', li_Element);
+
+                // Tweet Element Container
+                let tweet_Element = document.createElement('div');
+                tweet_Element.setAttribute('data-id', tweet['id']);
+                tweet_Element.classList.add('tweet_container');
+
+                // Tweet Text
+                let tweet_text = document.createElement('p');
+                tweet_text.classList.add('tweet_text');
+                tweet_text.innerHTML = tweet['content'];
+
+                // Tweet Like button
+                let like_button = document.createElement('button');
+                like_button.classList.add('btn');
+                like_button.classList.add('btn-primary');
+                like_button.innerHTML = 'Like';
+
+                // Number of likes
+                let likes_number = document.createElement('span');
+                likes_number.innerHTML = '0';
+
+                // Tweet Displike button
+                let dislike_button = document.createElement('button');
+                dislike_button.classList.add('btn');
+                dislike_button.classList.add('btn-primary');
+                dislike_button.innerHTML = 'Dislike';
+
+                // Number of Dislikes
+                let dislikes_number = document.createElement('span');
+                dislikes_number.innerHTML = '0';
+
+                // Insert All elements inside Div that will contain them
+                tweet_Element.insertAdjacentElement('beforeend', tweet_text);
+                tweet_Element.insertAdjacentElement('beforeend', like_button);
+                tweet_Element.insertAdjacentElement('beforeend', likes_number);
+                tweet_Element.insertAdjacentElement('beforeend', dislike_button);
+                tweet_Element.insertAdjacentElement('beforeend', dislikes_number);
+                tweetsElement.insertAdjacentElement('beforeend', tweet_Element);
+
             });
         })
 
