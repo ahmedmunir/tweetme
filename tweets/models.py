@@ -1,0 +1,6 @@
+from django.db import models
+
+# Create your models here.
+class Tweet(models.Model):
+    content     = models.TextField(max_length=250, blank=True, null=True)
+    image       = models.ImageField(upload_to="tweets/images/", blank=True, null=True)
