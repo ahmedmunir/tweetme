@@ -1,5 +1,49 @@
 {% extends 'pages/base.html' %}
 
+<!-- Home Title -->
+{% block title %}
+    {% if user.is_authenticated %}
+        Home - {{ user }}
+    {% else %}
+        TweetME - Home
+    {% endif %}
+{% endblock title %}
+
 {% block content %}
-    <h2>Hello munir</h2>
+    <div id="tweets"></div>
 {% endblock content %}
+
+{% block extraScript %}
+    <script>
+        // Display loading while fetching data of tweets
+        let tweetsElement = document.querySelector("#tweets");
+        tweetsElement.innerHTML = "Loading..."
+
+        // Fetch data from server
+        let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/`
+        fetch(url, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            
+            // Hide Loading shape
+            tweetsElement.innerHTML = "";
+
+            // Display tweets
+            data['tweets'].forEach(tweet => {
+                let li_Element = document.createElement('li');
+                li_Element.innerHTML = tweet['content'];
+                tweetsElement.insertAdjacentElement('beforeend', li_Element);
+            });
+        })
+
+
+
+        
+    </script>
+
+{% endblock extraScript %}
