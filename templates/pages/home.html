@@ -10,76 +10,184 @@
 {% endblock title %}
 
 {% block content %}
+    <form method="POST" action="{% url 'tweet-create' %}">
+        {% csrf_token %}
+        <textarea name="content" id="id_content" rows=10 cols=50></textarea>
+        <button type="submit" class="btn btn-secondary create_tweet" disabled>tweet</button>
+    </form>
     <div id="tweets"></div>
 {% endblock content %}
 
 {% block extraScript %}
     <script>
-        // Display loading while fetching data of tweets
+        /*
+            =========
+            Variables
+            =========
+        */
         let tweetsElement = document.querySelector("#tweets");
-        tweetsElement.innerHTML = "Loading..."
+        let counter = 0;
+        let quantity = 10;
+        let scrolled = false;
 
-        // Fetch data from server
-        let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/`
-        fetch(url, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
+        /*
+            ================
+            Event Listeners
+            ================
+        */
+
+        // Disable Button Tweet while Characters are 0 or more than 250
+        document.querySelector('#id_content').addEventListener('keyup', e => {
+            console.log()
+            if(e.target.value.length > 250 || e.target.value.length == 0){
+                console.log("True");
+                document.querySelector('.create_tweet').setAttribute('disabled', true);
+            } else {
+                console.log("False");
+                document.querySelector('.create_tweet').removeAttribute('disabled');
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            
-            // Hide Loading shape
-            tweetsElement.innerHTML = "";
 
-            // Display tweets
-            data['tweets'].forEach(tweet => {
-
-                // Tweet Element Container
-                let tweet_Element = document.createElement('div');
-                tweet_Element.setAttribute('data-id', tweet['id']);
-                tweet_Element.classList.add('tweet_container');
-
-                // Tweet Text
-                let tweet_text = document.createElement('p');
-                tweet_text.classList.add('tweet_text');
-                tweet_text.innerHTML = tweet['content'];
-
-                // Tweet Like button
-                let like_button = document.createElement('button');
-                like_button.classList.add('btn');
-                like_button.classList.add('btn-primary');
-                like_button.innerHTML = 'Like';
-
-                // Number of likes
-                let likes_number = document.createElement('span');
-                likes_number.innerHTML = '0';
-
-                // Tweet Displike button
-                let dislike_button = document.createElement('button');
-                dislike_button.classList.add('btn');
-                dislike_button.classList.add('btn-primary');
-                dislike_button.innerHTML = 'Dislike';
-
-                // Number of Dislikes
-                let dislikes_number = document.createElement('span');
-                dislikes_number.innerHTML = '0';
-
-                // Insert All elements inside Div that will contain them
-                tweet_Element.insertAdjacentElement('beforeend', tweet_text);
-                tweet_Element.insertAdjacentElement('beforeend', like_button);
-                tweet_Element.insertAdjacentElement('beforeend', likes_number);
-                tweet_Element.insertAdjacentElement('beforeend', dislike_button);
-                tweet_Element.insertAdjacentElement('beforeend', dislikes_number);
-                tweetsElement.insertAdjacentElement('beforeend', tweet_Element);
-
-            });
+        // Loading more data when reaching to the end of page
+        window.addEventListener('scroll', e => {
+            if(window.scrollY + window.innerHeight >= document.body.offsetHeight) {
+                // load more data from server
+                if(scrolled == false) {
+                    fetchData();
+                    scrolled = true;
+                    
+                }
+            }
         })
 
-
-
+        /*
+        ==============
+            Functions
+        ==============
+        */
         
+        //Display loading Icon
+        const loadingIcon = (state) => {
+            if(state=="hide"){
+                document.querySelector('.loading_icon').remove();
+            }
+            else if(state="show"){
+                let icon = document.createElement('h2');
+                icon.classList.add('loading_icon');
+                icon.innerHTML = "Loading..........";
+                tweetsElement.insertAdjacentElement('beforeend', icon);
+            }
+        }
+
+        // Fetch Tweets from server
+        const fetchData = () => {
+
+            // Display Loading Icon while waiting to Fetch data from back-end
+            loadingIcon('show');
+
+            const start = counter;
+            const end   = start + quantity - 1;
+            counter = end + 1;
+
+            let params = new URLSearchParams({
+                'start' : start,
+                'end' : end
+            })
+
+            // Fetch data from server
+            let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/?${params}`
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                
+                // Hide Loading shape
+                loadingIcon('hide');
+
+                if(data['tweets'].length > 0){
+
+                    // Display tweets
+                    data['tweets'].forEach(tweet => {
+
+                        // Tweet Element Container
+                        let tweet_Element = document.createElement('div');
+                        tweet_Element.classList.add('row');
+                        tweet_Element.setAttribute('data-id', tweet['id']);
+                        tweet_Element.classList.add('tweet_container');
+
+                        // Tweet text & username container
+                        let tweet_text_username = document.createElement('div');
+                        tweet_text_username.classList.add('col-md-10');
+
+                        // Tweet username
+                        let tweet_username = document.createElement('a');
+                        tweet_username.setAttribute('href', "#");
+                        tweet_username.innerHTML = "AHMED Munir";
+
+                        // Tweet Date
+                        let tweet_date = document.createElement('small');
+                        tweet_date.innerHTML = "25/09/2020 SAT"
+
+                        // Tweet Text
+                        let tweet_text = document.createElement('p');
+                        tweet_text.classList.add('tweet_text');
+                        tweet_text.innerHTML = tweet['content'];
+
+                        // Tweet Like button
+                        let like_button = document.createElement('a');
+                        like_button.classList.add('like_button');
+                        like_button.innerHTML = 'Like';
+
+                        // Number of likes
+                        let likes_number = document.createElement('span');
+                        likes_number.innerHTML = '0';
+
+                        // Tweet Displike button
+                        let dislike_button = document.createElement('a');
+                        dislike_button.classList.add('dislike_button');
+                        dislike_button.innerHTML = 'Dislike';
+
+                        // Number of Dislikes
+                        let dislikes_number = document.createElement('span');
+                        dislikes_number.innerHTML = '0';
+
+                        // User image container
+                        let user_image = document.createElement('div');
+                        user_image.classList.add('col-md-2');
+                        let image_url = '#';
+                        let image = document.createElement('img');
+                        image.setAttribute('src', image_url);
+                        user_image.insertAdjacentElement('afterbegin', image);
+
+                        // Insert All elements inside Div that will contain them
+                        tweet_text_username.insertAdjacentElement('beforeend', tweet_username);
+                        tweet_text_username.insertAdjacentElement('beforeend', tweet_date);
+                        tweet_text_username.insertAdjacentElement('beforeend', tweet_text);
+                        tweet_text_username.insertAdjacentElement('beforeend', like_button);
+                        tweet_text_username.insertAdjacentElement('beforeend', likes_number);
+                        tweet_text_username.insertAdjacentElement('beforeend', dislike_button);
+                        tweet_text_username.insertAdjacentElement('beforeend', dislikes_number);
+                        tweet_Element.insertAdjacentElement('beforeend', user_image);
+                        tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
+                        tweetsElement.insertAdjacentElement('beforeend', tweet_Element);
+
+                        //set scrolled to false again
+                        scrolled = false;
+                    });
+                } else {
+                    let tweets_end = document.createElement('small');
+                    tweets_end.classList.add('tweets_end');
+                    tweets_end.innerHTML = "There are no more tweets to load";
+                    tweetsElement.insertAdjacentElement('beforeend', tweets_end);
+                }
+            })
+        }
+
+        fetchData();
     </script>
 
 {% endblock extraScript %}

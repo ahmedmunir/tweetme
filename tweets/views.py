@@ -1,21 +1,33 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404, JsonResponse
+from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
+from tweets.forms import TweetForm
 from tweets.models import Tweet
 # Create your views here.
 
 # Home Function
 def home_view(request, *args, **kwargs):
-    return render(request, "pages/home.html", context={}, status=200)
+    form = TweetForm()
+    return render(request, "pages/home.html", context={"form": form}, status=200)
+
+def tweet_create(request, *args, **kwargs):
+    form = TweetForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse('home'))
+    return JsonResponse({"process": "failed"})
+    
 
 # List all Tweets
 def tweet_list_view(request, *args, **kwargs):
     """
         REST API View for all Tweets
     """
-    query_set = Tweet.objects.all()
-    
+    start = request.GET.get('start')
+    end = request.GET.get('end')
+    query_set = Tweet.objects.filter(id__range=(int(start), int(end)))
     # Convert tweets queryset into list to be able to send it through JSON
     tweets = [{"id": tweet.id, "content": tweet.content} for tweet in query_set]
     data = {
