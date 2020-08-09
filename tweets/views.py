@@ -15,9 +15,13 @@ def home_view(request, *args, **kwargs):
 # Create Tweet
 def tweet_create(request, *args, **kwargs):
     form = TweetForm(request.POST)
+    print("Done")
     if form.is_valid():
+        print("Valid")
+        form.instance.author = request.user
         new_tweet = form.save()
         return JsonResponse({"process": "success", "tweet": new_tweet.serialize()})
+    print("Not valid")
     return JsonResponse({"process": "failed", "errors": form.errors})
     
 
@@ -42,7 +46,7 @@ def tweet_list_view(request, *args, **kwargs):
     query_set = Tweet.objects.filter(id__range=(end_range, start_range)).order_by("-date_posted")
 
     # Convert tweets queryset into list to be able to send it through JSON
-    tweets = [{"id": tweet.id, "content": tweet.content, "date_posted": tweet.date_posted} for tweet in query_set]
+    tweets = [tweet.serialize() for tweet in query_set]
     data = {
         "isUser": False,
         "tweets": tweets,
