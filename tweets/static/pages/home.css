@@ -52,6 +52,10 @@ body {
     margin: 0px;
 }
 
+.text_username_container {
+    padding: 0px;
+}
+
 .tweet_username {
     color: white;
     margin-right: 1px;
@@ -89,4 +93,15 @@ body {
     cursor: pointer;
     color: yellow;
     text-decoration: none;
+}
+
+/* Style image */
+
+.image_container {
+    padding: 0px;
+    text-align: center;
+}
+.user_tweet_image {
+    width: 80%;
+    border-radius: 50%;
 }

@@ -12,11 +12,12 @@ def home_view(request, *args, **kwargs):
     form = TweetForm()
     return render(request, "pages/home.html", context={"form": form}, status=200)
 
+# Create Tweet
 def tweet_create(request, *args, **kwargs):
     form = TweetForm(request.POST)
     if form.is_valid():
-        form.save()
-        return HttpResponseRedirect(reverse('home'))
+        new_tweet = form.save()
+        return JsonResponse({"process": "success", "tweet": new_tweet.serialize()})
     return JsonResponse({"process": "failed"})
     
 
@@ -25,15 +26,26 @@ def tweet_list_view(request, *args, **kwargs):
     """
         REST API View for all Tweets
     """
+    
+    # Calculate the range of queryset according to user request 
     start = request.GET.get('start')
     end = request.GET.get('end')
-    query_set = Tweet.objects.filter(id__range=(int(start), int(end)))
-    
+    count = Tweet.objects.count()
+
+    """
+        Query data according to start & end request coming from User
+        first_index_at_DB was added to solve the problem if there were data deleted
+    """
+    first_index_at_DB = Tweet.objects.first().pk
+    start_range = count - int(start) + first_index_at_DB - 1 if count - int(start) > 0 else 0
+    end_range = count - int(end) + first_index_at_DB - 1 if count - int(end)  > 0 else 0
+    query_set = Tweet.objects.filter(id__range=(end_range, start_range)).order_by("-date_posted")
+
     # Convert tweets queryset into list to be able to send it through JSON
-    tweets = [{"id": tweet.id, "content": tweet.content} for tweet in query_set]
+    tweets = [{"id": tweet.id, "content": tweet.content, "date_posted": tweet.date_posted} for tweet in query_set]
     data = {
         "isUser": False,
-        "tweets": tweets
+        "tweets": tweets,
     }
     return JsonResponse(data)
 
