@@ -1,0 +1,92 @@
+body {
+    background-color: #15202B;
+    color: white;
+    box-sizing: border-box;
+}
+
+/* Styling Tweets Container */
+.nav_tweets {
+    padding: 0px;
+    width: 100%;
+    border-left: grey solid 0.5px;
+    border-right: grey solid 0.5px;
+}
+
+.nav_tweets h3 {
+    border-bottom :grey solid 0.5px;
+    padding: 10px;
+}
+
+/* Styling new Tweet textarea & Button */
+#id_content {
+    background-color: #15202B;
+    resize: none;
+    border: 0;
+    outline: none;
+    color: white;
+    display: block;
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+}
+
+.create_tweet{
+    display: block;
+    border-radius: 40%;
+    margin-left: 10px;
+    border-bottom: grey solid 0.5px;
+}
+
+.line_break {
+    height: 1px;
+    margin-top: 10px;
+    background-color: white;
+}
+
+/* Styling Tweets */
+.tweet_container {
+    width: 100%;
+    border-bottom: 1px solid grey;
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 0px;
+}
+
+.tweet_username {
+    color: white;
+    margin-right: 1px;
+}
+
+.tweet_username:hover {
+    color: white;
+}
+
+.tweet_user_unique {
+    color: grey;
+}
+
+.tweet_date {
+    margin-left: 10px;
+}
+
+.tweet_text {
+    margin-bottom: 5px;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.like_button,
+.dislike_button {
+    margin-right: 5px;
+}
+
+.likes_number {
+    margin-right: 20px;
+}
+
+.like_button:hover,
+.dislike_button:hover {
+    cursor: pointer;
+    color: yellow;
+    text-decoration: none;
+}

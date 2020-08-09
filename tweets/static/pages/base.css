@@ -1,0 +1,27 @@
+.nav_links {
+    padding-left: 70px;
+    padding-top: 50px;
+    padding-right: 0px;
+}
+
+.link_redirect {
+    display: block;
+    margin-bottom: 25px;
+    color: white;
+}
+
+.link_redirect:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.search_input_tag {
+    background-color: #253341;
+    border: gray solid 1px;
+    border-radius: 10%;
+    padding: 10px;
+    display: block;
+    margin-bottom: 10px;
+    outline: none;
+    color: white;
+}

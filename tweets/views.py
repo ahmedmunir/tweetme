@@ -28,6 +28,7 @@ def tweet_list_view(request, *args, **kwargs):
     start = request.GET.get('start')
     end = request.GET.get('end')
     query_set = Tweet.objects.filter(id__range=(int(start), int(end)))
+    
     # Convert tweets queryset into list to be able to send it through JSON
     tweets = [{"id": tweet.id, "content": tweet.content} for tweet in query_set]
     data = {
