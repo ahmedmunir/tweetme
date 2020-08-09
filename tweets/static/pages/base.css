@@ -1,7 +1,13 @@
 .nav_links {
+    position: fixed;
     padding-left: 70px;
     padding-top: 50px;
     padding-right: 0px;
+    width: 316px;
+}
+
+.nav_tweets {
+    margin-left: 316px;
 }
 
 .link_redirect {
@@ -18,10 +24,16 @@
 .search_input_tag {
     background-color: #253341;
     border: gray solid 1px;
-    border-radius: 10%;
+    border-radius: 5%;
     padding: 10px;
     display: block;
     margin-bottom: 10px;
     outline: none;
     color: white;
+}
+
+.search {
+    display: block;
+    width: 80%;
+    text-align: center;
 }

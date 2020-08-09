@@ -17,14 +17,17 @@
 
 {% block content %}
     <h3>TweeTs</h3>
-    <form method="POST" action="{% url 'tweet-create' %}">
-        {% csrf_token %}
-        <textarea name="content" id="id_content" placeholder="What is happening?"></textarea>
-        <button type="submit" class="btn btn-primary create_tweet" disabled>tweet</button>
-        <div class="line_break"></div>
-    </form>
-    <div id="tweets" class='panel-body'>
-    </div>
+
+    {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'tweet-create' %}">
+            {% csrf_token %}
+            <textarea name="content" id="id_content" placeholder="What is happening?"></textarea>
+            <button type="submit" class="btn btn-primary create_tweet" disabled>tweet</button>
+            <div class="line_break"></div>
+        </form>
+    {% endif %}
+
+    <div id="tweets" class='panel-body'></div>
 {% endblock content %}
 
 {% block extraScript %}
@@ -46,13 +49,16 @@
         */
 
         // Disable Button Tweet while Characters are 0 or more than 250
-        document.querySelector('#id_content').addEventListener('keyup', e => {
-            if(e.target.value.length > 250 || e.target.value.length == 0){
-                document.querySelector('.create_tweet').setAttribute('disabled', true);
-            } else {
-                document.querySelector('.create_tweet').removeAttribute('disabled');
-            }
-        })
+        // Ensure that user is already logged in to add event listener
+        if(document.querySelector('#id_content')){
+            document.querySelector('#id_content').addEventListener('keyup', e => {
+                if(e.target.value.length > 250 || e.target.value.length == 0){
+                    document.querySelector('.create_tweet').setAttribute('disabled', true);
+                } else {
+                    document.querySelector('.create_tweet').removeAttribute('disabled');
+                }
+            })
+        }
 
         // Loading more data when reaching to the end of page
         window.addEventListener('scroll', e => {
@@ -68,34 +74,39 @@
         })
 
         // Add new Tweet AJAX request
-        document.querySelector('.create_tweet').addEventListener('click', e => {
-            e.preventDefault();
-            
-            let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/create/`
-            let tweet_content = new FormData()
-            tweet_content.append('content', document.querySelector('#id_content').value);
-            // Send new TweeT request
-            fetch(url, {
-                method: "POST",
-                body: tweet_content,
-                headers: {
-                    'X-CSRFToken': document.querySelector('input[type=hidden]').value
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
+        // Ensure that user is already logged in to add event listener
+        if(document.querySelector('.create_tweet')){
+            document.querySelector('.create_tweet').addEventListener('click', e => {
+                e.preventDefault();
+                
+                let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/create/`
+                let tweet_content = new FormData()
+                tweet_content.append('content', document.querySelector('#id_content').value);
+                
+                // Send new TweeT request
+                fetch(url, {
+                    method: "POST",
+                    body: tweet_content,
+                    headers: {
+                        'X-CSRFToken': document.querySelector('input[type=hidden]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
 
-                // Append new tweet if it was successful
-                if(data['process'] == 'success') {
-                    
-                    add_tweet_to_dom('afterbegin', data['tweet']);
-                    document.querySelector('#id_content').value = '';
+                    // Append new tweet if it was successful
+                    if(data['process'] == 'success') {
+                        
+                        add_tweet_to_dom('afterbegin', data['tweet']);
+                        document.querySelector('#id_content').value = '';
 
-                } else if(data['process'] == 'failed') {
-                    alert("Couldn't add new tweet");
-                }
+                    } else if(data['process'] == 'failed') {
+                        alert(data['errors']['content'][0]);
+                    }
+                })
             })
-        })
+        }
+
 
         /*
         ==============
@@ -152,7 +163,6 @@
                     data['tweets'].forEach(tweet => {
 
                         //Add new Tweet
-                        console.log('Done');
                         add_tweet_to_dom('beforeend', tweet);
 
                         //set scrolled to false again

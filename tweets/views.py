@@ -18,7 +18,7 @@ def tweet_create(request, *args, **kwargs):
     if form.is_valid():
         new_tweet = form.save()
         return JsonResponse({"process": "success", "tweet": new_tweet.serialize()})
-    return JsonResponse({"process": "failed"})
+    return JsonResponse({"process": "failed", "errors": form.errors})
     
 
 # List all Tweets
