@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from django.conf import settings
-from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
+from users import views as users_views
 
 from tweets.views import (
     home_view, 
@@ -32,8 +33,40 @@ urlpatterns = [
     path('', home_view, name="home"),
     path('tweets/', tweet_list_view, name='tweets'),
     path('tweets/create/', tweet_create, name='tweet-create'),
-    path('tweets/<int:tweet_id>/', tweet_detail_view, name="tweet-detail")
+    path('tweets/<int:tweet_id>/', tweet_detail_view, name="tweet-detail"),
+
+    # User URLS (register, login, logout)
+    path('register/', users_views.register, name='register'),
+    path('login/', users_views.loginCustom, name='login'),
+    path('logout/', login_required(auth_views.LogoutView.as_view()), name='logout'),
+    
+    path('password-reset/',
+    auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
+    name='password-reset'),
+
+    path('password-reset/done/',
+    auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html')),
+
+    path('password-reset-confirm/<uidb64>/<token>/',
+    auth_views.PasswordResetConfirmView.as_view(template_name="users/password_reset_confirm.html")),
+
+    path('password-change/',
+    login_required(auth_views.PasswordChangeView.as_view(
+        template_name='users/password_change.html'
+    )), name='password-change'),
+
+    path('password-change-done/',
+    login_required(auth_views.PasswordChangeDoneView.as_view(
+        template_name="users/password_change_done.html"
+    )), name='password-change-done')
+
+
+
 ]
+
+# Configure URLS for media files at development process
+from django.conf import settings
+from django.conf.urls.static import static
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

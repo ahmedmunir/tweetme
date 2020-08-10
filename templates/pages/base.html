@@ -33,14 +33,14 @@
           <a class="link_redirect" href="#">
             <h3>Followers</h3>
           </a>
-          <a class="link_redirect" href="#">
+          <a class="link_redirect" href="{% url 'logout' %}">
             <h3>Logout</h3>
           </a>
         {% else %}
-          <a class="link_redirect" href="#">
+          <a class="link_redirect" href="{% url 'register' %}">
             <h3>Register</h3>
           </a>
-          <a class="link_redirect" href="#">
+          <a class="link_redirect" href="{% url 'login' %}">
             <h3>Login</h3>
           </a>
         {% endif %}

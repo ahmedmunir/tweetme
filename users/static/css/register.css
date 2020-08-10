@@ -1,0 +1,49 @@
+body {
+    background-color: #15202B;
+    color: white;
+}
+
+.register_container {
+    width: 60%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.register_header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+input.form-control,
+.custom-select {
+    background-color: #253341;
+    color: white;
+}
+
+input.form-control:focus {
+    background-color: #253341;
+    color: white;
+}
+
+#emailHelp,
+#passwordHelp,
+#usernameHelp {
+    color: white;
+}
+
+ul {
+    padding: 0px;
+}
+li {
+    list-style-type: none;
+    font-size: 13px
+}
+
+.error {
+    font-size: 13px;
+    color: red;
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/register.css' %}">
+
+        <title>TweeTME - Register</title>
+    </head>
+    <body>
+        <div class='container register_container'>
+            <h2 class='register_header'>Join TweeTME <i class="fa fa-envelope"></i></h2>
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                <label for="id_email">Email address:</label>
+                <input required type="email" name='email' maxlength="60" class="form-control" id="id_email" aria-describedby="emailHelp" placeholder="Enter email">
+                {% for error in form.email.errors %}
+                    <div class='error'>{{ error }}</div>
+                {% endfor %}
+                </div>
+                <div class="form-group">
+                <label for="id_password1">Password:</label>
+                <input type="password" class="form-control" id="id_password1" required name='password1' placeholder="Password">
+                {% for error in form.password1.errors %}
+                    <div class='error'>{{ error }}</div>
+                {% empty %}
+                    {{ form.password1.help_text }}
+                {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="id_password2">Password confirmation:</label>
+                    <input type="password" class="form-control" id="id_password2" required name='password2' placeholder="Confirm password">
+                    <small id="passwordHelp" class="form-text">Enter the same password as before</small>
+                    {% for error in form.password2.errors %}
+                        <div class='error'>{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="id_username">Username:</label>
+                    <input required type="text" maxlength="10" name='username' maxlength="60" class="form-control" id="id_username" placeholder="Enter username">
+                    {% for error in form.username.errors %}
+                        <div class='error'>{{ error }}</div>
+                    {% endfor %}
+                    <small id="usernameHelp" class="form-text">This field must be unique</small>
+                </div>
+                <div class="form-group">
+                    <label for="id_first_name">First name:</label>
+                    <input required type="text" maxlength="10" name='first_name' maxlength="60" class="form-control" id="id_first_name" placeholder="Enter first name">
+                    {% for error in form.first_name.errors %}
+                    <div class='error'>{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="id_last_name">Last name:</label>
+                    <input required type="text" maxlength="10" name='last_name' maxlength="60" class="form-control" id="id_last_name" placeholder="Enter last name">
+                    {% for error in form.last_name.errors %}
+                    <div class='error'>{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="id_gender">Gender:</label>
+                    <select class="custom-select" required name='gender' id='id_gender'>
+                    <option value="">Choose gender</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                    </select>
+                    {% for error in form.gender.errors %}
+                        <div class='error'>{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary">Sign up</button>
+            </form>
+            <div class='login_redirect mt-3 border-top pt-3'>
+                <p class='login_text'>Already Have An Account? <a class='ml-2' href="{% url 'login' %}">Sign In</a></p>
+            </div>
+        </div>
+    </body>
+</html>

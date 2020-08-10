@@ -3,7 +3,7 @@
 <!-- Home Title -->
 {% block title %}
     {% if user.is_authenticated %}
-        Home - {{ user }}
+        Home - {{ user.username }}
     {% else %}
         TweetME - Home
     {% endif %}

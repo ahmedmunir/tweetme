@@ -15,13 +15,10 @@ def home_view(request, *args, **kwargs):
 # Create Tweet
 def tweet_create(request, *args, **kwargs):
     form = TweetForm(request.POST)
-    print("Done")
     if form.is_valid():
-        print("Valid")
         form.instance.author = request.user
         new_tweet = form.save()
         return JsonResponse({"process": "success", "tweet": new_tweet.serialize()})
-    print("Not valid")
     return JsonResponse({"process": "failed", "errors": form.errors})
     
 
