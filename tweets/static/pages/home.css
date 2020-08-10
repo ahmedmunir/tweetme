@@ -4,18 +4,38 @@ body {
     box-sizing: border-box;
 }
 
+.search_box {
+    text-align: center;
+    padding: 20px;
+    border-bottom: grey solid 0.5px;
+}
+
+.search_input_tag {
+    background-color: #253341;
+    border: gray solid 1px;
+    border-radius: 3%;
+    width: 70%;
+    outline: none;
+    color: white;
+    padding: 6px;
+    vertical-align: middle;
+}
+
+.search {
+    width: 20%;
+    text-align: center;
+    vertical-align: middle;
+}
+
 /* Styling Tweets Container */
 .nav_tweets {
     padding: 0px;
     width: 100%;
     border-left: grey solid 0.5px;
     border-right: grey solid 0.5px;
+    border-bottom: grey solid 0.5px;
 }
 
-.nav_tweets h3 {
-    border-bottom :grey solid 0.5px;
-    padding: 10px;
-}
 
 /* Styling new Tweet textarea & Button */
 #id_content {
@@ -59,6 +79,7 @@ body {
 .tweet_username {
     color: white;
     margin-right: 1px;
+    font-weight: bold;
 }
 
 .tweet_username:hover {
@@ -67,6 +88,7 @@ body {
 
 .tweet_user_unique {
     color: grey;
+    font-size: 16px;
 }
 
 .tweet_date {

@@ -21,19 +21,3 @@
     cursor: pointer;
 }
 
-.search_input_tag {
-    background-color: #253341;
-    border: gray solid 1px;
-    border-radius: 5%;
-    padding: 10px;
-    display: block;
-    margin-bottom: 10px;
-    outline: none;
-    color: white;
-}
-
-.search {
-    display: block;
-    width: 80%;
-    text-align: center;
-}

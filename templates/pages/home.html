@@ -5,7 +5,7 @@
     {% if user.is_authenticated %}
         Home - {{ user.username }}
     {% else %}
-        TweetME - Home
+        TweeTME - Home
     {% endif %}
 {% endblock title %}
 
@@ -16,8 +16,10 @@
 {% endblock extraStyle %}
 
 {% block content %}
-    <h3>TweeTs</h3>
-
+    <div class="search_box">
+        <input type="text" placeholder="search" name="search" class="search_input_tag">
+        <button class='btn btn-primary search'>Search</button>
+    </div>
     {% if user.is_authenticated %}
         <form method="POST" action="{% url 'tweet-create' %}">
             {% csrf_token %}
@@ -189,7 +191,7 @@
 
             // Tweet text & username container
             let tweet_text_username = document.createElement('div');
-            tweet_text_username.classList.add('col-md-10')
+            tweet_text_username.classList.add('col-md-11')
             tweet_text_username.classList.add('text_username_container');
 
             // Tweet username
@@ -235,7 +237,7 @@
 
             // User image container
             let user_image = document.createElement('div');
-            user_image.classList.add('col-md-2');
+            user_image.classList.add('col-md-1');
             user_image.classList.add('image_container');
             let image_url = tweet['user_image'];
             let image = document.createElement('img');
