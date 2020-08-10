@@ -72,7 +72,8 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     gender          = models.IntegerField(choices=GENDER_CHOICES)
     first_name      = models.CharField(max_length=10, unique=False)
     last_name       = models.CharField(max_length=10, unique=False)
-    image           = models.ImageField(upload_to='profile_pics', null=True, blank=True)   
+    image           = models.ImageField(upload_to='profile_pics', null=True, blank=True)
+    bio             = models.TextField(max_length=250, blank=True, null=True)   
 
     # Those Fields are Required with AbstractBaseUser to work as expected.
     date_joined     = models.DateTimeField(auto_now_add=True)
