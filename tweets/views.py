@@ -1,7 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404, JsonResponse, HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse
+from django.http import  JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from tweets.forms import TweetForm
 from tweets.models import Tweet
@@ -13,12 +12,23 @@ def home_view(request, *args, **kwargs):
     return render(request, "pages/home.html", context={"form": form}, status=200)
 
 # Create Tweet
+@login_required
 def tweet_create(request, *args, **kwargs):
     form = TweetForm(request.POST)
     if form.is_valid():
         form.instance.author = request.user
         new_tweet = form.save()
-        return JsonResponse({"process": "success", "tweet": new_tweet.serialize()})
+        new_tweet_serializer = {
+            "id": new_tweet.id,
+            "content": new_tweet.content,
+            "date_posted": new_tweet.date_posted,
+            "user_username": new_tweet.author.username,
+            "user_first_name": new_tweet.author.first_name,
+            "user_last_name": new_tweet.author.last_name,
+            "user_image": new_tweet.author.image.url,
+            "tweet-owner": new_tweet.author == request.user
+        }
+        return JsonResponse({"process": "success", "tweet": new_tweet_serializer})
     return JsonResponse({"process": "failed", "errors": form.errors})
     
 
@@ -29,42 +39,80 @@ def tweet_list_view(request, *args, **kwargs):
     """
     
     # Calculate the range of queryset according to user request 
-    start = request.GET.get('start')
-    end = request.GET.get('end')
+    start = int(request.GET.get('start'))
+    end = int(request.GET.get('end'))
+    quantity = 10
     count = Tweet.objects.count()
-
+    first_index_at_DB = Tweet.objects.first().pk
+    last_index = Tweet.objects.last().pk    
     """
         Query data according to start & end request coming from User
         first_index_at_DB was added to solve the problem if there were data deleted
+        last_index was added to solve problem if one of tweets in middle was deleted
     """
-    first_index_at_DB = Tweet.objects.first().pk
-    start_range = count - int(start) + first_index_at_DB - 1 if count - int(start) > 0 else 0
-    end_range = count - int(end) + first_index_at_DB - 1 if count - int(end)  > 0 else 0
+
+    start_range = count - start + first_index_at_DB  if count - start > 0 else 0
+    end_range = count - end + first_index_at_DB  if last_index - end  > 0 else 0
     query_set = Tweet.objects.filter(id__range=(end_range, start_range)).order_by("-date_posted")
 
     # Convert tweets queryset into list to be able to send it through JSON
-    tweets = [tweet.serialize() for tweet in query_set]
+    tweets = [{
+        "id": tweet.id,
+        "content": tweet.content,
+        "date_posted": tweet.date_posted,
+        "user_username": tweet.author.username,
+        "user_first_name": tweet.author.first_name,
+        "user_last_name": tweet.author.last_name,
+        "user_image": tweet.author.image.url,
+        "tweet-owner": tweet.author == request.user
+    } for tweet in query_set]
     data = {
-        "isUser": False,
         "tweets": tweets,
     }
     return JsonResponse(data)
 
-# Tweet detail view
-def tweet_detail_view(request, tweet_id, *args, **kwargs):
-    """
-        REST API View for specific tweet 
-    """
-    data = {
-        "id": tweet_id
-    }
+# Delete Tweet 
+@login_required
+def tweet_delete(request, tweet_id, *args, **kwargs):
     try:
         tweet = Tweet.objects.get(id=tweet_id)
-        data['content'] = tweet.content
-        # data['image_path'] = tweet.image.url
-        status = 200
     except:
-        data['message'] = "Not Found"
-        status = 404
+        return JsonResponse({'message': "Tweet wasn't found"})
     
-    return JsonResponse(data, status=status)
+    # Ensure that the owner of tweet who wants to delete it
+    if tweet.author == request.user:
+        tweet.delete()
+        return JsonResponse({'message': 'delete success'})
+    else:
+        return JsonResponse({'message': "You can't delete tweet because you are not the owner"})
+
+
+
+
+
+
+
+
+
+from .serializers import TweetSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
+
+# restrict other views like GET & can't use Response without it
+# we can modify API to accept ['DELETE', 'GET', 'POST']
+@api_view(['POST']) 
+
+# Those authentications decorators can be set at CBV & settings.py
+# Allow just authenticated user to create tweet through API
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated]) 
+
+# Login will not be changed, normal function just the reponse will be changed.
+def tweet_create_drf(request, *args, **kwargs):
+    serializer = TweetSerializer(data=request.POST)
+    if serializer.is_valid():
+        obj = serializer.save(author=request.user)
+        return Response({"process": "success", "tweet": serializer.data})
+    return Response({"process": "failed", "errors": serializer.errors})

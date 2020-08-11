@@ -22,9 +22,10 @@ from users import views as users_views
 
 from tweets.views import (
     home_view, 
-    tweet_detail_view, 
+    tweet_delete, 
     tweet_list_view, 
-    tweet_create
+    tweet_create,
+    tweet_create_drf
 )
 
 urlpatterns = [
@@ -33,7 +34,8 @@ urlpatterns = [
     path('', home_view, name="home"),
     path('tweets/', tweet_list_view, name='tweets'),
     path('tweets/create/', tweet_create, name='tweet-create'),
-    path('tweets/<int:tweet_id>/', tweet_detail_view, name="tweet-detail"),
+    # path('tweets/create/', tweet_create_drf, name='tweet-create'),
+    path('tweets/<int:tweet_id>/delete/', tweet_delete, name="tweet-delete"),
 
     # User URLS (register, login, logout)
     path('register/', users_views.register, name='register'),

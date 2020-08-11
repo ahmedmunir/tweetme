@@ -43,6 +43,8 @@
         let counter = 0;
         let quantity = 10;
         let scrolled = false;
+        let start;
+        let end;
 
         /*
             ================
@@ -109,7 +111,6 @@
             })
         }
 
-
         /*
         ==============
             Functions
@@ -129,6 +130,32 @@
             }
         }
 
+        // DELETE Function Event Listener
+        const delete_event_listener = (delete_button) => {
+            delete_button.addEventListener('click', e => {
+                e.preventDefault();
+                let id = e.target.closest('.tweet_container').dataset.id;
+                let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/${id}/delete/`;
+
+                fetch(url, {
+                    method: "POST",
+                    headers: {
+                        'X-CSRFToken': document.querySelector('input[type=hidden]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data['message'] == 'delete success'){
+                        e.target.closest('.tweet_container').remove();
+                        
+                        //can be modified later
+                        alert(data['message'])
+                    } else {
+                        alert(data['message']);
+                    }
+                })
+            })
+        }
 
         // Fetch Tweets from server
         const fetchData = () => {
@@ -136,8 +163,8 @@
             // Display Loading Icon while waiting to Fetch data from back-end
             loadingIcon('show');
 
-            const start = counter;
-            const end   = start + quantity - 1;
+            start = counter;
+            end   = start + quantity - 1;
             counter = end + 1;
 
             let params = new URLSearchParams({
@@ -169,6 +196,7 @@
 
                         //set scrolled to false again
                         scrolled = false;
+                        
                     });
                 } else {
                     let tweets_end = document.createElement('small');
@@ -235,6 +263,13 @@
             dislikes_number.classList.add('dislikes_number');
             dislikes_number.innerHTML = '0';
 
+            // Delete button
+            if(tweet['tweet-owner'] === true) {
+                var delete_button = document.createElement('a');
+                delete_button.classList.add('delete_tweet');
+                delete_button.innerHTML = '<i class="fa fa-trash"></i>';
+            }
+
             // User image container
             let user_image = document.createElement('div');
             user_image.classList.add('col-md-1');
@@ -254,9 +289,19 @@
             tweet_text_username.insertAdjacentElement('beforeend', likes_number);
             tweet_text_username.insertAdjacentElement('beforeend', dislike_button);
             tweet_text_username.insertAdjacentElement('beforeend', dislikes_number);
+
+            // Display Delete button if exists
+            if(delete_button){
+                tweet_text_username.insertAdjacentElement('beforeend', delete_button);
+                // Add event listener to new DELETE Button
+                delete_event_listener(delete_button);
+            }
+            
             tweet_Element.insertAdjacentElement('beforeend', user_image);
             tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
             tweetsElement.insertAdjacentElement(position, tweet_Element);
+
+            
         }
 
         fetchData();
