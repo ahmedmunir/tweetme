@@ -3,7 +3,7 @@
 <!-- Home Title -->
 {% block title %}
     {% if user.is_authenticated %}
-        Home - {{ user.username }}
+        Home - @{{ user.username }}
     {% else %}
         TweeTME - Home
     {% endif %}
@@ -90,7 +90,7 @@
                     method: "POST",
                     body: tweet_content,
                     headers: {
-                        'X-CSRFToken': document.querySelector('input[type=hidden]').value
+                        'X-CSRFToken': getCookie('csrftoken')
                     }
                 })
                 .then(response => response.json())
@@ -114,6 +114,23 @@
             Functions
         ==============
         */
+
+        //GET CSRF Token
+        const getCookie =  name =>  {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
         
         //Display loading Icon
         const loadingIcon = (state) => {
@@ -133,13 +150,6 @@
             react_button.addEventListener('click', e => {
                 e.preventDefault();
 
-                // Set token
-                let token;
-                if(document.querySelector('input[type=hidden]')) {
-                    token = document.querySelector('input[type=hidden]').value;
-                } else {
-                    token = null;
-                }
                 let id = e.target.closest('.tweet_container').dataset.id;
                 let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/${id}/react/`;
                 let react = e.target.closest('a').dataset['react']
@@ -151,11 +161,12 @@
                     method: "POST",
                     body: data,
                     headers: {
-                        'X-CSRFToken': token
+                        'X-CSRFToken': getCookie('csrftoken')
                     }
                 })
                 .then(response => {
-                    if(response.status == 403){
+                    console.log(response)
+                    if(response.redirected == true){
                         document.querySelector('.wrong-alert').innerHTML = "You need to login first to be able to react to TweeTs!";
                     } else {
                         return response.json();
@@ -193,7 +204,7 @@
                 fetch(url, {
                     method: "POST",
                     headers: {
-                        'X-CSRFToken': document.querySelector('input[type=hidden]').value
+                        'X-CSRFToken': getCookie('csrftoken')
                     }
                 })
                 .then(response => response.json())

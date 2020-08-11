@@ -171,27 +171,5 @@ def tweet_react(request, tweet_id, *args, **kwargs):
                 'like': 'remove',
                 'dislike': 'add'
             })
-
-
-from .serializers import TweetSerializer
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication
-
-# restrict other views like GET & can't use Response without it
-# we can modify API to accept ['DELETE', 'GET', 'POST']
-@api_view(['POST']) 
-
-# Those authentications decorators can be set at CBV & settings.py
-# Allow just authenticated user to create tweet through API
-@authentication_classes([SessionAuthentication])
-@permission_classes([IsAuthenticated]) 
-
-# Login will not be changed, normal function just the reponse will be changed.
-def tweet_create_drf(request, *args, **kwargs):
-    serializer = TweetSerializer(data=request.POST)
-    if serializer.is_valid():
-        obj = serializer.save(author=request.user)
-        return Response({"process": "success", "tweet": serializer.data})
-    return Response({"process": "failed", "errors": serializer.errors})
+    else:
+        return JsonResponse({'message': 'This react is not allowed to our tweets!'})

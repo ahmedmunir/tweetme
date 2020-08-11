@@ -26,7 +26,6 @@ from tweets.views import (
     tweet_list_view,
     tweet_delete, 
     tweet_react,
-    tweet_create_drf
 )
 
 urlpatterns = [
@@ -35,7 +34,6 @@ urlpatterns = [
     path('', home_view, name="home"),
     path('tweets/', tweet_list_view, name='tweets'),
     path('tweets/create/', tweet_create, name='tweet-create'),
-    # path('tweets/create/', tweet_create_drf, name='tweet-create'),
     path('tweets/<int:tweet_id>/delete/', tweet_delete, name="tweet-delete"),
     path('tweets/<int:tweet_id>/react/', tweet_react, name='tweet-react'),
 
