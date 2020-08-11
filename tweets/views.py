@@ -26,7 +26,11 @@ def tweet_create(request, *args, **kwargs):
             "user_first_name": new_tweet.author.first_name,
             "user_last_name": new_tweet.author.last_name,
             "user_image": new_tweet.author.image.url,
-            "tweet-owner": new_tweet.author == request.user
+            "tweet-owner": new_tweet.author == request.user,
+            "likes": new_tweet.likes.count(),
+            "dislikes": new_tweet.dislikes.count(),
+            "liked": "add" if request.user in new_tweet.likes.all() else "remove",
+            "disliked": "remove" if request.user in new_tweet.dislikes.all() else "remove"
         }
         return JsonResponse({"process": "success", "tweet": new_tweet_serializer})
     return JsonResponse({"process": "failed", "errors": form.errors})
@@ -64,7 +68,11 @@ def tweet_list_view(request, *args, **kwargs):
         "user_first_name": tweet.author.first_name,
         "user_last_name": tweet.author.last_name,
         "user_image": tweet.author.image.url,
-        "tweet-owner": tweet.author == request.user
+        "tweet-owner": tweet.author == request.user,
+        "likes": tweet.likes.count(),
+        "dislikes": tweet.dislikes.count(),
+        "liked": "add" if request.user in tweet.likes.all() else "remove",
+        "disliked": "add" if request.user in tweet.dislikes.all() else "remove"
     } for tweet in query_set]
     data = {
         "tweets": tweets,
@@ -82,16 +90,81 @@ def tweet_delete(request, tweet_id, *args, **kwargs):
     # Ensure that the owner of tweet who wants to delete it
     if tweet.author == request.user:
         tweet.delete()
-        return JsonResponse({'message': 'delete success'})
+        return JsonResponse({'message': 'TweeT deleted successfully!'})
     else:
-        return JsonResponse({'message': "You can't delete tweet because you are not the owner"})
+        return JsonResponse({'message': "You can't delete tweet because you are not the owner!"})
 
 
+# Like & Dislike 
+@login_required
+def tweet_react(request, tweet_id, *args, **kwargs):
+    try:
+        tweet = Tweet.objects.get(id=tweet_id)
+    except:
+        return JsonResponse({'message': "Tweet doesn't exist anymore!"})
+    react = request.POST.get('react')
+    
+    if react == 'like':
 
+    # user didn't react to tweet before
+        if request.user not in tweet.likes.all() and request.user not in tweet.dislikes.all():
+            tweet.likes.add(request.user)
+            return JsonResponse({
+                "likes": tweet.likes.count(),
+                "dislikes": tweet.dislikes.count(),
+                'like': 'add',
+                'dislike': 'remove'
+            })
 
+        elif request.user in tweet.likes.all():
+            tweet.likes.remove(request.user)
+            return JsonResponse({
+                "likes": tweet.likes.count(),
+                "dislikes": tweet.dislikes.count(),
+                'like': 'remove',
+                'dislike': 'remove'
+            })
 
+        elif request.user in tweet.dislikes.all():
+            tweet.dislikes.remove(request.user)
+            tweet.likes.add(request.user)
+            return JsonResponse({
+                "likes": tweet.likes.count(),
+                "dislikes": tweet.dislikes.count(),
+                'like': 'add',
+                'dislike': 'remove'
+            })
 
+    elif react == 'dislike':
 
+        # user didn't react to tweet before
+        if request.user not in tweet.likes.all() and request.user not in tweet.dislikes.all():
+            tweet.dislikes.add(request.user)
+            return JsonResponse({
+                "likes": tweet.likes.count(),
+                "dislikes": tweet.dislikes.count(),
+                'like': 'remove',
+                'dislike': 'add'
+            })
+
+        elif request.user in tweet.dislikes.all():
+            tweet.dislikes.remove(request.user)
+            return JsonResponse({
+                "likes": tweet.likes.count(),
+                "dislikes": tweet.dislikes.count(),
+                'like': 'remove',
+                'dislike': 'remove'
+            })
+
+        elif request.user in tweet.likes.all():
+            tweet.dislikes.add(request.user)
+            tweet.likes.remove(request.user)
+            return JsonResponse({
+                "likes": tweet.likes.count(),
+                "dislikes": tweet.dislikes.count(),
+                'like': 'remove',
+                'dislike': 'add'
+            })
 
 
 from .serializers import TweetSerializer

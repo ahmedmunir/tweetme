@@ -19,6 +19,7 @@
     <div class="search_box">
         <input type="text" placeholder="search" name="search" class="search_input_tag">
         <button class='btn btn-primary search'>Search</button>
+        <p class='wrong-alert'></p>
     </div>
     {% if user.is_authenticated %}
         <form method="POST" action="{% url 'tweet-create' %}">
@@ -105,7 +106,7 @@
                         document.querySelector('#id_content').value = '';
 
                     } else if(data['process'] == 'failed') {
-                        alert(data['errors']['content'][0]);
+                        document.querySelector('.wrong-alert').innerHTML = data['errors']['content'][0];
                     }
                 })
             })
@@ -130,7 +131,62 @@
             }
         }
 
-        // DELETE Function Event Listener
+        // REACT tweet function
+        const react_tweet = (react_button) => {
+            react_button.addEventListener('click', e => {
+                e.preventDefault();
+
+                // Set token
+                let token;
+                if(document.querySelector('input[type=hidden]')) {
+                    token = document.querySelector('input[type=hidden]').value;
+                } else {
+                    token = null;
+                }
+                let id = e.target.closest('.tweet_container').dataset.id;
+                let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/${id}/react/`;
+                let react = e.target.closest('a').dataset['react']
+                let data = new FormData()
+                data.append('react', react);
+
+                // Send request
+                fetch(url, {
+                    method: "POST",
+                    body: data,
+                    headers: {
+                        'X-CSRFToken': token
+                    }
+                })
+                .then(response => {
+                    if(response.status == 403){
+                        document.querySelector('.wrong-alert').innerHTML = "You need to login first to be able to react to TweeTs!";
+                    } else {
+                        return response.json();
+                    }
+                })
+                .then(data => {
+                    // If tweet deleted before we react
+                    if(data['message']) {
+                        document.querySelector('.wrong-alert').innerHTML = data['message'];
+                    } else {
+
+                        // Change link button state
+                        e.target.closest('.text_username_container').childNodes[4].classList[data['like']]('react_color');
+                        
+                        // change number of likes
+                        e.target.closest('.text_username_container').childNodes[5].innerHTML = data['likes'];
+                        
+                        // change dislike button state
+                        e.target.closest('.text_username_container').childNodes[6].classList[data['dislike']]('react_color');
+                        
+                        // change number of dislikes
+                        e.target.closest('.text_username_container').childNodes[7].innerHTML = data['dislikes'];
+                    }
+                })
+            })
+        }
+
+        // DELETE Function 
         const delete_event_listener = (delete_button) => {
             delete_button.addEventListener('click', e => {
                 e.preventDefault();
@@ -149,9 +205,9 @@
                         e.target.closest('.tweet_container').remove();
                         
                         //can be modified later
-                        alert(data['message'])
+                        document.querySelector('.wrong-alert').innerHTML = data['message'];
                     } else {
-                        alert(data['message']);
+                        document.querySelector('.wrong-alert').innerHTML = data['message'];
                     }
                 })
             })
@@ -246,28 +302,37 @@
             // Tweet Like button
             let like_button = document.createElement('a');
             like_button.classList.add('like_button');
+            like_button.classList[tweet['liked']]('react_color');
+            like_button.setAttribute('data-react', 'like');
             like_button.innerHTML = '<i class="fa fa-thumbs-up"></i>';
+            react_tweet(like_button);
 
             // Number of likes
             let likes_number = document.createElement('span');
             likes_number.classList.add('likes_number');
-            likes_number.innerHTML = '0';
+            likes_number.innerHTML = tweet['likes'];
 
-            // Tweet Displike button
+            // Tweet Dislike button
             let dislike_button = document.createElement('a');
             dislike_button.classList.add('dislike_button');
+            dislike_button.classList[tweet['disliked']]('react_color');
+            dislike_button.setAttribute('data-react', 'dislike');
             dislike_button.innerHTML = '<i class="fa fa-thumbs-down"></i>';
+            react_tweet(dislike_button);
 
             // Number of Dislikes
             let dislikes_number = document.createElement('span');
             dislikes_number.classList.add('dislikes_number');
-            dislikes_number.innerHTML = '0';
+            dislikes_number.innerHTML = tweet['dislikes'];
 
             // Delete button
             if(tweet['tweet-owner'] === true) {
                 var delete_button = document.createElement('a');
                 delete_button.classList.add('delete_tweet');
                 delete_button.innerHTML = '<i class="fa fa-trash"></i>';
+
+                // Add event listener to new DELETE Button
+                delete_event_listener(delete_button);
             }
 
             // User image container
@@ -293,8 +358,6 @@
             // Display Delete button if exists
             if(delete_button){
                 tweet_text_username.insertAdjacentElement('beforeend', delete_button);
-                // Add event listener to new DELETE Button
-                delete_event_listener(delete_button);
             }
             
             tweet_Element.insertAdjacentElement('beforeend', user_image);

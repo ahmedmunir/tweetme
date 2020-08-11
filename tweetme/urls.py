@@ -21,10 +21,11 @@ from django.contrib.auth.decorators import login_required
 from users import views as users_views
 
 from tweets.views import (
-    home_view, 
-    tweet_delete, 
-    tweet_list_view, 
+    home_view,
     tweet_create,
+    tweet_list_view,
+    tweet_delete, 
+    tweet_react,
     tweet_create_drf
 )
 
@@ -36,6 +37,7 @@ urlpatterns = [
     path('tweets/create/', tweet_create, name='tweet-create'),
     # path('tweets/create/', tweet_create_drf, name='tweet-create'),
     path('tweets/<int:tweet_id>/delete/', tweet_delete, name="tweet-delete"),
+    path('tweets/<int:tweet_id>/react/', tweet_react, name='tweet-react'),
 
     # User URLS (register, login, logout)
     path('register/', users_views.register, name='register'),

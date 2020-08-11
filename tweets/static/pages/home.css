@@ -27,6 +27,12 @@ body {
     vertical-align: middle;
 }
 
+.wrong-alert {
+    color: rgb(255, 112, 112);
+    margin-bottom: 0px;
+    margin-top: 10px;
+}
+
 /* Styling Tweets Container */
 .nav_tweets {
     padding: 0px;
@@ -116,6 +122,10 @@ body {
     cursor: pointer;
     color: yellow;
     text-decoration: none;
+}
+
+.react_color {
+    color: yellow;
 }
 
 .delete_tweet:hover {
