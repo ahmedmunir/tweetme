@@ -43,22 +43,27 @@ def tweet_list_view(request, *args, **kwargs):
     """
     
     # Calculate the range of queryset according to user request 
-    start = int(request.GET.get('start'))
-    end = int(request.GET.get('end'))
     quantity = 10
-    count = Tweet.objects.count()
-    first_index_at_DB = Tweet.objects.first().pk
-    last_index = Tweet.objects.last().pk    
-    """
-        Query data according to start & end request coming from User
-        first_index_at_DB was added to solve the problem if there were data deleted
-        last_index was added to solve problem if one of tweets in middle was deleted
-    """
-
-    start_range = count - start + first_index_at_DB  if count - start > 0 else 0
-    end_range = count - end + first_index_at_DB  if last_index - end  > 0 else 0
-    query_set = Tweet.objects.filter(id__range=(end_range, start_range)).order_by("-date_posted")
-
+    start = int(request.GET.get('start'))
+    last_index = Tweet.objects.last().pk
+    end_range = last_index - start
+    start_range = end_range - quantity
+    query_set = list(Tweet.objects.filter(id__range=(start_range, end_range)).order_by("-date_posted"))
+    
+    if(len(query_set) < 10):
+        start += quantity
+        while(len(query_set) < 10 and start_range > 0):
+            try:
+                new_data = Tweet.objects.filter(id=start_range).first()
+            except:
+                new_data = []
+            if(new_data):
+                query_set.append(new_data)
+            start_range -= 1
+            start += 1
+    else:
+        start += quantity
+    
     # Convert tweets queryset into list to be able to send it through JSON
     tweets = [{
         "id": tweet.id,
@@ -76,6 +81,7 @@ def tweet_list_view(request, *args, **kwargs):
     } for tweet in query_set]
     data = {
         "tweets": tweets,
+        'start': start
     }
     return JsonResponse(data)
 

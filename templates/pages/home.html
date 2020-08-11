@@ -41,11 +41,8 @@
             =========
         */
         let tweetsElement = document.querySelector("#tweets");
-        let counter = 0;
-        let quantity = 10;
         let scrolled = false;
-        let start;
-        let end;
+        var start = 0
 
         /*
             ================
@@ -201,10 +198,8 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if(data['message'] == 'delete success'){
+                    if(data['message'] == 'TweeT deleted successfully!'){
                         e.target.closest('.tweet_container').remove();
-                        
-                        //can be modified later
                         document.querySelector('.wrong-alert').innerHTML = data['message'];
                     } else {
                         document.querySelector('.wrong-alert').innerHTML = data['message'];
@@ -219,13 +214,8 @@
             // Display Loading Icon while waiting to Fetch data from back-end
             loadingIcon('show');
 
-            start = counter;
-            end   = start + quantity - 1;
-            counter = end + 1;
-
             let params = new URLSearchParams({
                 'start' : start,
-                'end' : end
             })
 
             // Fetch data from server
@@ -249,6 +239,9 @@
 
                         //Add new Tweet
                         add_tweet_to_dom('beforeend', tweet);
+
+                        //set start to new value
+                        start = data['start'];
 
                         //set scrolled to false again
                         scrolled = false;
