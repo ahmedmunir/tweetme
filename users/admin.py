@@ -31,23 +31,7 @@ class AddUserForm(forms.ModelForm):
             raise forms.ValidationError("Password don't match")
         return password2
 
-
-class UpdateUserForm(forms.ModelForm):
-    """
-        Update User form, To not allow changing PW at admin pagw
-    """
-    password = ReadOnlyPasswordHashField()
-
-    class Meta:
-        model = NewUser
-        fields = ('email', 'password', 'username', 'first_name', 'last_name', 'gender', 'image', 'bio')
-
-        def clean_password(self):
-            return self.initial['password']
-
-
 class NewUserAdmin(UserAdmin):
-    form = UpdateUserForm
     add_form = AddUserForm
 
     list_display = ('email', 'username', 'is_admin', 'is_staff', 'date_joined')

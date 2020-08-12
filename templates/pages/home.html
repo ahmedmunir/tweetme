@@ -42,7 +42,7 @@
         */
         let tweetsElement = document.querySelector("#tweets");
         let scrolled = false;
-        var start = 0
+        let start = 0
 
         /*
             ================
@@ -165,7 +165,6 @@
                     }
                 })
                 .then(response => {
-                    console.log(response)
                     if(response.redirected == true){
                         document.querySelector('.wrong-alert').innerHTML = "You need to login first to be able to react to TweeTs!";
                     } else {
@@ -173,22 +172,46 @@
                     }
                 })
                 .then(data => {
+
                     // If tweet deleted before we react
                     if(data['message']) {
                         document.querySelector('.wrong-alert').innerHTML = data['message'];
                     } else {
+                        
+                        targeted_element = e.target.closest('.text_username_container');
+                        len_of_elements = targeted_element.childNodes.length
 
-                        // Change link button state
-                        e.target.closest('.text_username_container').childNodes[4].classList[data['like']]('react_color');
-                        
-                        // change number of likes
-                        e.target.closest('.text_username_container').childNodes[5].innerHTML = data['likes'];
-                        
-                        // change dislike button state
-                        e.target.closest('.text_username_container').childNodes[6].classList[data['dislike']]('react_color');
-                        
-                        // change number of dislikes
-                        e.target.closest('.text_username_container').childNodes[7].innerHTML = data['dislikes'];
+                        // Because we don't know if it is a retweet or normal Tweet
+                        // we will depend existence of retweet_container class or not
+
+                        if(targeted_element.innerHTML.includes('retweet_container')){
+
+                            // Change link button state
+                            targeted_element.childNodes[5].classList[data['like']]('react_color');
+                            
+                            // change number of likes
+                            targeted_element.childNodes[6].innerHTML = data['likes'];
+                            
+                            // change dislike button state
+                            targeted_element.childNodes[7].classList[data['dislike']]('react_color');
+                            
+                            // change number of dislikes
+                            targeted_element.childNodes[8].innerHTML = data['dislikes'];
+                        } else {
+
+                            // Change link button state
+                            targeted_element.childNodes[4].classList[data['like']]('react_color');
+                            
+                            // change number of likes
+                            targeted_element.childNodes[5].innerHTML = data['likes'];
+                            
+                            // change dislike button state
+                            targeted_element.childNodes[6].classList[data['dislike']]('react_color');
+                            
+                            // change number of dislikes
+                            targeted_element.childNodes[7].innerHTML = data['dislikes'];
+
+                        }
                     }
                 })
             })
@@ -258,6 +281,7 @@
                         scrolled = false;
                         
                     });
+
                 } else {
                     let tweets_end = document.createElement('small');
                     tweets_end.classList.add('tweets_end');
@@ -339,6 +363,67 @@
                 delete_event_listener(delete_button);
             }
 
+            // Display Retweeted Tweet if it is a Retweet
+            if(tweet['retweet']) {
+                var retweet_container = document.createElement('a');
+                retweet_container.classList.add('retweet_container');
+                retweet_container.classList.add('row');
+                retweet_container.setAttribute('data-id', tweet['retweet']['id']);
+
+                let retweet_Element = document.createElement('div');
+                retweet_Element.classList.add('col-7');
+                retweet_Element.classList.add('retext_username_container');
+                
+
+                // Retweet username
+                let retweet_username = document.createElement('a');
+                retweet_username.classList.add('retweet_username');
+                retweet_username.setAttribute('href', "#");
+                retweet_username.innerHTML = `${tweet['retweet']['user_first_name']} ${tweet['retweet']['user_last_name']}`;
+
+                // Retweet user unique name
+                let retweet_unique_user = document.createElement('small');
+                retweet_unique_user.classList.add('retweet_user_unique');
+                retweet_unique_user.innerHTML = ` @${tweet['retweet']['user_username']}`;
+
+                // Retweet Date
+                let retweet_date = document.createElement('small');
+                retweet_date.classList.add('retweet_date');
+                retweet_date.innerHTML = tweet['retweet']['date_posted'];
+
+                // Retweet Text
+                let retweet_text = document.createElement('p');
+                retweet_text.classList.add('retweet_text');
+                retweet_text.innerHTML = tweet['retweet']['content'];
+
+                // Retweet image
+                // User image container
+                let rt_user_image = document.createElement('div');
+                rt_user_image.classList.add('col-1');
+                rt_user_image.classList.add('image_container');
+                let rt_image_url = tweet['retweet']['user_image'];
+                let rt_image = document.createElement('img');
+                rt_image.classList.add('user_tweet_image');
+                rt_image.setAttribute('src', rt_image_url);
+                rt_user_image.insertAdjacentElement('afterbegin', rt_image);
+
+                //append data to retweet element
+                retweet_Element.insertAdjacentElement('beforeend', retweet_username);
+                retweet_Element.insertAdjacentElement('beforeend', retweet_unique_user);
+                retweet_Element.insertAdjacentElement('beforeend', retweet_date);
+                retweet_Element.insertAdjacentElement('beforeend', retweet_text);
+                retweet_container.insertAdjacentElement('beforeend', rt_user_image);
+                retweet_container.insertAdjacentElement('beforeend', retweet_Element);
+                
+            } else {
+
+                // Create retweet button
+                var retweet_button = document.createElement('a');
+                retweet_button.classList.add('retweet_tweet');
+                retweet_button.innerHTML = '<i class="fa fa-retweet" aria-hidden="true"></i>';
+
+            }
+
             // User image container
             let user_image = document.createElement('div');
             user_image.classList.add('col-md-1');
@@ -354,6 +439,12 @@
             tweet_text_username.insertAdjacentElement('beforeend', tweet_unique_user);
             tweet_text_username.insertAdjacentElement('beforeend', tweet_date);
             tweet_text_username.insertAdjacentElement('beforeend', tweet_text);
+
+            // add retweet container if exists
+            if(retweet_container) {
+                tweet_text_username.insertAdjacentElement('beforeend', retweet_container);
+            }
+            
             tweet_text_username.insertAdjacentElement('beforeend', like_button);
             tweet_text_username.insertAdjacentElement('beforeend', likes_number);
             tweet_text_username.insertAdjacentElement('beforeend', dislike_button);
@@ -364,6 +455,11 @@
                 tweet_text_username.insertAdjacentElement('beforeend', delete_button);
             }
             
+            // add retweet button if there is not retweet
+            if(!retweet_container) {
+                tweet_text_username.insertAdjacentElement('beforeend', retweet_button);
+            }
+
             tweet_Element.insertAdjacentElement('beforeend', user_image);
             tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
             tweetsElement.insertAdjacentElement(position, tweet_Element);

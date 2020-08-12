@@ -49,7 +49,7 @@ def tweet_list_view(request, *args, **kwargs):
     end_range = last_index - start
     start_range = end_range - quantity
     query_set = list(Tweet.objects.filter(id__range=(start_range, end_range)).order_by("-date_posted"))
-    
+
     if(len(query_set) < 10):
         start += quantity
         while(len(query_set) < 10 and start_range > 0):
@@ -63,7 +63,7 @@ def tweet_list_view(request, *args, **kwargs):
             start += 1
     else:
         start += quantity
-    
+
     # Convert tweets queryset into list to be able to send it through JSON
     tweets = [{
         "id": tweet.id,
@@ -77,29 +77,14 @@ def tweet_list_view(request, *args, **kwargs):
         "likes": tweet.likes.count(),
         "dislikes": tweet.dislikes.count(),
         "liked": "add" if request.user in tweet.likes.all() else "remove",
-        "disliked": "add" if request.user in tweet.dislikes.all() else "remove"
+        "disliked": "add" if request.user in tweet.dislikes.all() else "remove",
+        "retweet": tweet.retweeted_tweet.serializer(request.user) if tweet.retweeted_tweet else False
     } for tweet in query_set]
     data = {
         "tweets": tweets,
         'start': start
     }
     return JsonResponse(data)
-
-# Delete Tweet 
-@login_required
-def tweet_delete(request, tweet_id, *args, **kwargs):
-    try:
-        tweet = Tweet.objects.get(id=tweet_id)
-    except:
-        return JsonResponse({'message': "Tweet wasn't found"})
-    
-    # Ensure that the owner of tweet who wants to delete it
-    if tweet.author == request.user:
-        tweet.delete()
-        return JsonResponse({'message': 'TweeT deleted successfully!'})
-    else:
-        return JsonResponse({'message': "You can't delete tweet because you are not the owner!"})
-
 
 # Like & Dislike 
 @login_required
@@ -173,3 +158,18 @@ def tweet_react(request, tweet_id, *args, **kwargs):
             })
     else:
         return JsonResponse({'message': 'This react is not allowed to our tweets!'})
+
+# Delete Tweet 
+@login_required
+def tweet_delete(request, tweet_id, *args, **kwargs):
+    try:
+        tweet = Tweet.objects.get(id=tweet_id)
+    except:
+        return JsonResponse({'message': "Tweet wasn't found"})
+    
+    # Ensure that the owner of tweet who wants to delete it
+    if tweet.author == request.user:
+        tweet.delete()
+        return JsonResponse({'message': 'TweeT deleted successfully!'})
+    else:
+        return JsonResponse({'message': "You can't delete tweet because you are not the owner!"})

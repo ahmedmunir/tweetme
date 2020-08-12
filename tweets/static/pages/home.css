@@ -78,30 +78,36 @@ body {
     margin: 0px;
 }
 
-.text_username_container {
+.text_username_container,
+.retext_username_container {
     padding: 0px;
 }
 
-.tweet_username {
+.tweet_username,
+.retweet_username {
     color: white;
     margin-right: 1px;
     font-weight: bold;
 }
 
-.tweet_username:hover {
+.tweet_username:hover,
+.retweet_username:hover {
     color: white;
 }
 
-.tweet_user_unique {
+.tweet_user_unique,
+.retweet_user_unique {
     color: grey;
     font-size: 16px;
 }
 
-.tweet_date {
+.tweet_date,
+.retweet_date {
     margin-left: 10px;
 }
 
-.tweet_text {
+.tweet_text,
+.retweet_text {
     margin-bottom: 5px;
     width: 100%;
     word-wrap: break-word;
@@ -128,6 +134,10 @@ body {
     color: yellow;
 }
 
+.delete_tweet {
+    margin-right: 20px;
+}
+
 .delete_tweet:hover {
     cursor: pointer;
     color: red;
@@ -142,4 +152,28 @@ body {
 .user_tweet_image {
     width: 80%;
     border-radius: 50%;
+}
+
+/* Retweet Style */
+.retweet_container {
+    /* display: block; */
+    width: 100%;
+    cursor: pointer;
+    border: 1px solid gray;
+    border-radius: 10px;
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    margin-left: 0;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+.retweet_container:hover {
+    text-decoration: none;
+    color: white;
+}
+
+.retweet_tweet:hover {
+    cursor: pointer;
+    color: green;
 }
