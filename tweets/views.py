@@ -18,20 +18,7 @@ def tweet_create(request, *args, **kwargs):
     if form.is_valid():
         form.instance.author = request.user
         new_tweet = form.save()
-        new_tweet_serializer = {
-            "id": new_tweet.id,
-            "content": new_tweet.content,
-            "date_posted": new_tweet.date_posted,
-            "user_username": new_tweet.author.username,
-            "user_first_name": new_tweet.author.first_name,
-            "user_last_name": new_tweet.author.last_name,
-            "user_image": new_tweet.author.image.url,
-            "tweet-owner": new_tweet.author == request.user,
-            "likes": new_tweet.likes.count(),
-            "dislikes": new_tweet.dislikes.count(),
-            "liked": "add" if request.user in new_tweet.likes.all() else "remove",
-            "disliked": "remove" if request.user in new_tweet.dislikes.all() else "remove"
-        }
+        new_tweet_serializer = new_tweet.serializer(request.user) 
         return JsonResponse({"process": "success", "tweet": new_tweet_serializer})
     return JsonResponse({"process": "failed", "errors": form.errors})
     
@@ -65,21 +52,7 @@ def tweet_list_view(request, *args, **kwargs):
         start += quantity
 
     # Convert tweets queryset into list to be able to send it through JSON
-    tweets = [{
-        "id": tweet.id,
-        "content": tweet.content,
-        "date_posted": tweet.date_posted,
-        "user_username": tweet.author.username,
-        "user_first_name": tweet.author.first_name,
-        "user_last_name": tweet.author.last_name,
-        "user_image": tweet.author.image.url,
-        "tweet-owner": tweet.author == request.user,
-        "likes": tweet.likes.count(),
-        "dislikes": tweet.dislikes.count(),
-        "liked": "add" if request.user in tweet.likes.all() else "remove",
-        "disliked": "add" if request.user in tweet.dislikes.all() else "remove",
-        "retweet": tweet.retweeted_tweet.serializer(request.user) if tweet.retweeted_tweet else False
-    } for tweet in query_set]
+    tweets = [ tweet.serializer(request.user) for tweet in query_set]
     data = {
         "tweets": tweets,
         'start': start

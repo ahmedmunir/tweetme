@@ -364,6 +364,7 @@
             }
 
             // Display Retweeted Tweet if it is a Retweet
+            console.log(`${tweet['id']} - ${tweet['retweet']}`);
             if(tweet['retweet']) {
                 var retweet_container = document.createElement('a');
                 retweet_container.classList.add('retweet_container');

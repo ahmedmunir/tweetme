@@ -30,4 +30,5 @@ class Tweet(models.Model):
             "dislikes": self.dislikes.count(),
             "liked": "add" if user in self.likes.all() else "remove",
             "disliked": "add" if user in self.dislikes.all() else "remove",
+            "retweet": self.retweeted_tweet.serializer(user) if self.retweeted_tweet else self.retweeted_tweet
         }
