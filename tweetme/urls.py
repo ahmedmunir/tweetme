@@ -18,24 +18,19 @@ from django.urls import path
 
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
+from django.urls import include
+
 from users import views as users_views
 
-from tweets.views import (
-    home_view,
-    tweet_create,
-    tweet_list_view,
-    tweet_delete, 
-    tweet_react,
-)
+from tweets.views import home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', home_view, name="home"),
-    path('tweets/', tweet_list_view, name='tweets'),
-    path('tweets/create/', tweet_create, name='tweet-create'),
-    path('tweets/<int:tweet_id>/delete/', tweet_delete, name="tweet-delete"),
-    path('tweets/<int:tweet_id>/react/', tweet_react, name='tweet-react'),
+
+    # Tweets urls
+    path('tweets/', include('tweets.urls')),
 
     # User URLS (register, login, logout)
     path('register/', users_views.register, name='register'),
