@@ -2,7 +2,7 @@
 
 <!-- Home Title -->
 {% block title %}
-    Home - @{{ user.username }}
+    Home - @{{ selected_user.username }}
 {% endblock title %}
 
 <!-- Home static -->
@@ -16,38 +16,40 @@
     <div class='profile-container container p-4'>
         <div class='row align-items-center'>
             <div class='image_container col-4'>
-                <img class='user_image' src="{{ user.image.url }}" style="width: 70%">
+                <img class='user_image' src="{{ selected_user.image.url }}" style="width: 70%">
             </div>
             <div class= 'user_info'>
-                <p class='mb-2'><span class='user-info'>Email: </span>{{user.email}}
-                    {% if user != request.user %}
-                        {% if request.user in user.followed_by.all %}
-                            <button class='btn btn-danger follow_button ml-4'>Unfollow</button>
-                        {% else %}
-                            <button class='btn btn-primary follow_button ml-4'>Follow</button>
+                <p class='mb-2'><span class='user-info'>Email: </span>{{selected_user.email}}
+                    {% if request.user.is_authenticated %}
+                        {% if selected_user != request.user %}
+                            {% if request.user in selected_user.followed_by.all %}
+                                <button class='btn btn-danger follow_button ml-4'>Unfollow</button>
+                            {% else %}
+                                <button class='btn btn-primary follow_button ml-4'>Follow</button>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </p>
-                <p class='mb-2 user_username ' data-username="{{user.username}}"><span class='user-info'>Username:</span> {{user.username}}</p>
+                <p class='mb-2 user_username ' data-username="{{selected_user.username}}"><span class='user-info'>Username:</span> {{selected_user.username}}</p>
                 <p class='mb-2'><span class='user-info'>Gender:</span> 
-                    {% if user.gender == 1 %}
+                    {% if selected_user.gender == 1 %}
                         Male
-                    {% elif user.gender == 2 %}
+                    {% elif selected_user.gender == 2 %}
                         Female
                     {% endif %}
                 </p>
-                <p class='mb-1'><span class='user-info'>Full name:</span> {{user.first_name}} {{user.last_name}}</p>
+                <p class='mb-1'><span class='user-info'>Full name:</span> {{selected_user.first_name}} {{selected_user.last_name}}</p>
             </div>
         </div>
         <div class='info-container mt-4'>
             <div class='row'>
-                <p class='col-3 text_center'><span class='user-info'>Followers:</span> <span class='followers'>{{ user.followed_by.count }}</span></p>
-                <p class='col-3 text_center'><span class='user-info'>Following:</span> <span class='following'>{{ user.following.count }}</span></p>
-                <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> {{user.date_joined}}</p>
+                <p class='col-3 text_center'><span class='user-info'>Followers:</span> <span class='followers'>{{ selected_user.followed_by.count }}</span></p>
+                <p class='col-3 text_center'><span class='user-info'>Following:</span> <span class='following'>{{ selected_user.following.count }}</span></p>
+                <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> {{selected_user.date_joined}}</p>
             </div>
-            {% if user.bio %}
+            {% if selected_user.bio %}
             <div class='row'>
-                <p class='col-12 bio'>{{ user.bio }}</p>
+                <p class='col-12 bio'>{{ selected_user.bio }}</p>
             </div>
             {% endif %}
         </div>

@@ -44,14 +44,14 @@ def loginCustom(request, *args, **kwargs):
 # User profile
 def profile(request, username, *args, **kwargs):
     try:
-        user = NewUser.objects.filter(username=username).first()
+        selected_user = NewUser.objects.filter(username=username).first()
     except:
         raise Http404
     
-    if not user:
+    if not selected_user:
         raise Http404
     
-    return render(request, 'users/user_profile.html', {"user": user})
+    return render(request, 'users/user_profile.html', {"selected_user": selected_user})
 
 # List all Tweets
 def user_tweets(request, username, *args, **kwargs):
@@ -132,4 +132,8 @@ def user_follow(request, *args, **kwargs):
                 request.user.save()
                 return JsonResponse({
                     "state": "unfollow"
+                })
+            else:
+                return JsonResponse({
+                    "state": "You need to Login First"
                 })
