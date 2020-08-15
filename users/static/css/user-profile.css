@@ -17,3 +17,11 @@
 .follow_button {
     border-radius: 10px;
 }
+
+a.user_follow_count {
+    color: white;
+}
+a.user_follow_count:hover {
+    color: white;
+    text-decoration: underline;
+}

@@ -391,109 +391,119 @@
 
         //
         const retweet_function = (tweet) => {
-
-            // Display backdrop window
-            document.querySelector('.backdrop_window').style.display = 'block';
-
-            //Display drop down window with needed info
-            let retweet_form = document.createElement('form');
-            retweet_form.classList.add('retweet_form');
-            retweet_form.setAttribute('method', 'POST');
-            retweet_form.setAttribute('action', `/tweets/${tweet['id']}/retweet/`);
-            
-            // CSRF Token
-            let csrf_input = document.createElement('input');
-            csrf_input.setAttribute('type', 'hidden');
-            csrf_input.setAttribute('name', 'csrfmiddlewaretoken');
-            csrf_input.setAttribute('value', getCookie('csrftoken'));
-
-            // Retweet comment
-            let retweet_comment = document.createElement('textarea');
-            retweet_comment.setAttribute('name', 'content');
-            retweet_comment.setAttribute('id', 'id_content');
-            retweet_comment.setAttribute('placeholder', 'Add your comment');
-
-            // Tweet Element Container
-            let tweet_Element = document.createElement('div');
-            tweet_Element.classList.add('row');
-            tweet_Element.classList.add('tweet_container');
-            tweet_Element.setAttribute('name', 'id');
-            tweet_Element.setAttribute('value', tweet['id']);
-
-            // Tweet text & username container
-            let tweet_text_username = document.createElement('div');
-            tweet_text_username.classList.add('col-md-11')
-            tweet_text_username.classList.add('text_username_container');
-
-            // Tweet username
-            let tweet_username = document.createElement('small');
-            tweet_username.classList.add('tweet_username');
-            tweet_username.innerHTML = `${tweet['user_first_name']} ${tweet['user_last_name']}`;
-
-            // Tweet user unique name
-            let tweet_unique_user = document.createElement('small');
-            tweet_unique_user.classList.add('tweet_user_unique');
-            tweet_unique_user.innerHTML = ` @${tweet['user_username']}`;
-
-            // Tweet Date
-            let tweet_date = document.createElement('small');
-            tweet_date.classList.add('tweet_date');
-            tweet_date.innerHTML = tweet['date_posted'];
-
-            // Tweet Text
-            let tweet_text = document.createElement('p');
-            tweet_text.classList.add('tweet_text');
-            tweet_text.innerHTML = tweet['content'];
-
-            // User image container
-            let user_image = document.createElement('div');
-            user_image.classList.add('col-md-1');
-            user_image.classList.add('image_container');
-            let image_url = tweet['user_image'];
-            let image = document.createElement('img');
-            image.classList.add('user_tweet_image');
-            image.setAttribute('src', image_url);
-            user_image.insertAdjacentElement('afterbegin', image);
-
-            // Cancel and retweet buttons
-            let retweet_button = document.createElement('button');
-            retweet_button.setAttribute('type', 'submit');
-            retweet_button.classList.add('btn');
-            retweet_button.classList.add('btn-primary');
-            retweet_button.classList.add('retweet_cancel');
-            retweet_button.innerHTML = 'Retweet';
-            let cancel_retweet_button = document.createElement('button');
-            cancel_retweet_button.classList.add('btn');
-            cancel_retweet_button.classList.add('btn-danger');
-            cancel_retweet_button.classList.add('retweet_cancel');
-            cancel_retweet_button.innerHTML = 'Cancel';
-
-            // Add Event listener for cancel Button
-            cancel_retweet_button.addEventListener('click', e => {
-                e.preventDefault();
-
-                // Remove form
-                retweet_form.remove();
-
-                // Disblay none for backgroun-window
-                document.querySelector('.backdrop_window').style.display = 'none';
+            // Ensure that user is already logged in
+            let user_check = false;
+            document.querySelectorAll('.link_redirect').forEach(anchor_link => {
+                if(anchor_link.getAttribute("href") == '/logout/') {
+                    user_check = true;
+                }
             })
 
-            tweet_text_username.insertAdjacentElement('beforeend', tweet_username);
-            tweet_text_username.insertAdjacentElement('beforeend', tweet_unique_user);
-            tweet_text_username.insertAdjacentElement('beforeend', tweet_date);
-            tweet_text_username.insertAdjacentElement('beforeend', tweet_text);
-            tweet_Element.insertAdjacentElement('beforeend', user_image);
-            tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
-            retweet_form.insertAdjacentElement('beforeend', csrf_input);
-            retweet_form.insertAdjacentElement('beforeend', retweet_comment);
-            retweet_form.insertAdjacentElement('beforeend', tweet_Element);
-            retweet_form.insertAdjacentElement('beforeend', cancel_retweet_button);
-            retweet_form.insertAdjacentElement('beforeend', retweet_button);
-            
-            //Insert retweet_form
-            document.querySelector('body').insertAdjacentElement('afterbegin', retweet_form);
+            if(user_check) {
+                // Display backdrop window
+                document.querySelector('.backdrop_window').style.display = 'block';
 
+                //Display drop down window with needed info
+                let retweet_form = document.createElement('form');
+                retweet_form.classList.add('retweet_form');
+                retweet_form.setAttribute('method', 'POST');
+                retweet_form.setAttribute('action', `/tweets/${tweet['id']}/retweet/`);
+                
+                // CSRF Token
+                let csrf_input = document.createElement('input');
+                csrf_input.setAttribute('type', 'hidden');
+                csrf_input.setAttribute('name', 'csrfmiddlewaretoken');
+                csrf_input.setAttribute('value', getCookie('csrftoken'));
+
+                // Retweet comment
+                let retweet_comment = document.createElement('textarea');
+                retweet_comment.setAttribute('name', 'content');
+                retweet_comment.setAttribute('id', 'id_content');
+                retweet_comment.setAttribute('placeholder', 'Add your comment');
+
+                // Tweet Element Container
+                let tweet_Element = document.createElement('div');
+                tweet_Element.classList.add('row');
+                tweet_Element.classList.add('tweet_container');
+                tweet_Element.setAttribute('name', 'id');
+                tweet_Element.setAttribute('value', tweet['id']);
+
+                // Tweet text & username container
+                let tweet_text_username = document.createElement('div');
+                tweet_text_username.classList.add('col-md-11')
+                tweet_text_username.classList.add('text_username_container');
+
+                // Tweet username
+                let tweet_username = document.createElement('small');
+                tweet_username.classList.add('tweet_username');
+                tweet_username.innerHTML = `${tweet['user_first_name']} ${tweet['user_last_name']}`;
+
+                // Tweet user unique name
+                let tweet_unique_user = document.createElement('small');
+                tweet_unique_user.classList.add('tweet_user_unique');
+                tweet_unique_user.innerHTML = ` @${tweet['user_username']}`;
+
+                // Tweet Date
+                let tweet_date = document.createElement('small');
+                tweet_date.classList.add('tweet_date');
+                tweet_date.innerHTML = tweet['date_posted'];
+
+                // Tweet Text
+                let tweet_text = document.createElement('p');
+                tweet_text.classList.add('tweet_text');
+                tweet_text.innerHTML = tweet['content'];
+
+                // User image container
+                let user_image = document.createElement('div');
+                user_image.classList.add('col-md-1');
+                user_image.classList.add('image_container');
+                let image_url = tweet['user_image'];
+                let image = document.createElement('img');
+                image.classList.add('user_tweet_image');
+                image.setAttribute('src', image_url);
+                user_image.insertAdjacentElement('afterbegin', image);
+
+                // Cancel and retweet buttons
+                let retweet_button = document.createElement('button');
+                retweet_button.setAttribute('type', 'submit');
+                retweet_button.classList.add('btn');
+                retweet_button.classList.add('btn-primary');
+                retweet_button.classList.add('retweet_cancel');
+                retweet_button.innerHTML = 'Retweet';
+                let cancel_retweet_button = document.createElement('button');
+                cancel_retweet_button.classList.add('btn');
+                cancel_retweet_button.classList.add('btn-danger');
+                cancel_retweet_button.classList.add('retweet_cancel');
+                cancel_retweet_button.innerHTML = 'Cancel';
+
+                // Add Event listener for cancel Button
+                cancel_retweet_button.addEventListener('click', e => {
+                    e.preventDefault();
+
+                    // Remove form
+                    retweet_form.remove();
+
+                    // Disblay none for backgroun-window
+                    document.querySelector('.backdrop_window').style.display = 'none';
+                })
+
+                tweet_text_username.insertAdjacentElement('beforeend', tweet_username);
+                tweet_text_username.insertAdjacentElement('beforeend', tweet_unique_user);
+                tweet_text_username.insertAdjacentElement('beforeend', tweet_date);
+                tweet_text_username.insertAdjacentElement('beforeend', tweet_text);
+                tweet_Element.insertAdjacentElement('beforeend', user_image);
+                tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
+                retweet_form.insertAdjacentElement('beforeend', csrf_input);
+                retweet_form.insertAdjacentElement('beforeend', retweet_comment);
+                retweet_form.insertAdjacentElement('beforeend', tweet_Element);
+                retweet_form.insertAdjacentElement('beforeend', cancel_retweet_button);
+                retweet_form.insertAdjacentElement('beforeend', retweet_button);
+                
+                //Insert retweet_form
+                document.querySelector('body').insertAdjacentElement('afterbegin', retweet_form);
+            } else {
+                alert("You need to login first to retweet!");
+            }
         }
 
         // Fetch Tweets from server

@@ -152,6 +152,7 @@ body {
 .user_tweet_image {
     width: 80%;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 /* Retweet Style */

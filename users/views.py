@@ -137,3 +137,25 @@ def user_follow(request, *args, **kwargs):
                 return JsonResponse({
                     "state": "You need to Login First"
                 })
+
+# Following Function
+def user_following(request, username, *args, **kwargs):
+    try:
+        user_following = NewUser.objects.filter(username=username).first()
+    except:
+        raise Http404
+    if not user_following:
+        raise Http404
+
+    return render(request, "users/user_following.html", {"user_following": user_following})
+
+# Followers Function
+def user_followers(request, username, *args, **kwargs):
+    try:
+        user_followers = NewUser.objects.filter(username=username).first()
+    except:
+        raise Http404
+    if not user_followers:
+        raise Http404
+
+    return render(request, "users/user_followers.html", {"user_followers": user_followers})

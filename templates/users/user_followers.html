@@ -1,0 +1,123 @@
+{% extends 'pages/base.html' %}
+
+<!-- Home Title -->
+{% block title %}
+    People followed by {{ user_followers.username }}
+{% endblock title %}
+
+<!-- Home static -->
+{% load static %}
+{% block extraStyle %}
+    <link rel="stylesheet" href="{% static 'pages/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user_following.css' %}">
+{% endblock extraStyle %}
+
+{% block content %}
+    <div class="header_user_following">    
+        <h5 class="header_user">{{ user_followers.first_name }} {{ user_followers.last_name}} following: {{ user_followers.followed_by.count }}</h5>
+        <h5 class="header_username" style="color: gray">@{{ user_followers.username }}</h5>
+    </div>
+    <div class='following_links'>
+        {% for user_to_follow in user_followers.followed_by.all %}
+            <div class='container user_container' data-username="{{ user_to_follow.username }}">
+                <div class='row'>
+                    <div class='col-1'>
+                        <img class='username_image' src="{{ user_to_follow.image.url }}">
+                    </div>
+                    <div class='col-11'>
+                        <div class='row'>
+                            <div class='col-10'>
+                                <a href="{% url 'user-profile' user_to_follow.username %}" class='user_link'>
+                                    {{ user_to_follow.first_name }} {{ user_to_follow.last_name }}
+                                </a>
+                                <p class='user_username'>@{{ user_to_follow.username }}</p>
+                            </div>
+                            <div class='col-2'>
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user != user_to_follow %}
+                                        {% if request.user in user_to_follow.followed_by.all %}
+                                            <button class='btn btn-danger follow_button'>Unfollow</button>
+                                        {% else %}
+                                            <button class='btn btn-primary follow_button'>Follow</button>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-12'>
+                                {% if user_to_follow.bio %}
+                                    {{ user_to_follow.bio}}
+                                {% endif %}
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock content %}
+
+{% block extraScript %}
+<script>
+    //GET CSRF Token
+    const getCookie =  name =>  {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Follow or UnFollow
+    if(document.querySelector('.follow_button')){
+        document.querySelector('.follow_button').addEventListener('click', e => {
+            e.preventDefault();
+        
+            let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/follow/`;
+            let data = new FormData();
+            let state = document.querySelector('.follow_button').innerHTML;
+            let target = e.target.closest('.user_container').dataset.username;
+            data.append('state', state);
+            data.append('target', target);
+        
+            fetch(url, {
+                method: 'POST',
+                body: data,
+        
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                
+                // If follow process succeded 
+                if(data['state'] == 'follow') {
+                    document.querySelector('.follow_button').classList.remove('btn-primary');
+                    document.querySelector('.follow_button').classList.add('btn-danger');
+                    document.querySelector('.follow_button').innerHTML = "Unfollow";
+                }
+        
+                // If unfollow process succeded
+                else if(data['state'] == 'unfollow') {
+                    document.querySelector('.follow_button').classList.add('btn-primary');
+                    document.querySelector('.follow_button').classList.remove('btn-danger');
+                    document.querySelector('.follow_button').innerHTML = "Follow"; 
+
+                }
+            })
+        })
+    }
+</script>
+{% endblock extraScript %}

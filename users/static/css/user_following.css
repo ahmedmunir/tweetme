@@ -1,0 +1,43 @@
+div.col-1{
+    padding-right: 0px;
+    padding-left: 10px;
+}
+.header_user_following {
+    padding: 15px;
+    padding-top: 50px;
+    margin-bottom: 0px;
+}
+
+.header_user {
+    margin-bottom: 0px;
+}
+
+.following_links {
+    margin-top: 20px;
+}
+
+.user_container {
+    border-top: 1px solid gray;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.username_image {
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user_link {
+    color: white;
+    font-weight: bold;
+}
+.user_link:hover {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.user_username {
+    color: gray;
+}

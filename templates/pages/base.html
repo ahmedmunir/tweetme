@@ -31,12 +31,6 @@
           <a class="link_redirect" href="#">
             <h4>Profile</h4>
           </a>
-          <a class="link_redirect" href="#">
-            <h4>Following</h4>
-          </a>
-          <a class="link_redirect" href="#">
-            <h4>Followers</h4>
-          </a>
           <a class="link_redirect" href="{% url 'logout' %}">
             <h4>Logout</h4>
           </a>
@@ -48,10 +42,6 @@
             <h4>Login</h4>
           </a>
         {% endif %}
-        <!-- <div class="search_box">
-          <input type="text" placeholder="search" name="search" class="search_input_tag">
-          <button class='btn btn-primary search'>Search</button>
-        </div> -->
       </div>
       <div class='col-sm-7 col-md-7 col-lg-7 nav_tweets'>
         {% block content %}

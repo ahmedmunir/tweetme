@@ -39,6 +39,8 @@ urlpatterns = [
     path('logout/', login_required(auth_views.LogoutView.as_view()), name='logout'),
     path('<str:username>/', users_views.profile, name='user-profile'),
     path('<str:username>/tweets/', users_views.user_tweets, name='user-tweets'),
+    path('<str:username>/following', users_views.user_following, name='user-following'),
+    path('<str:username>/followers', users_views.user_followers, name="user-followed_by"),
 
     
     path('password-reset/',
