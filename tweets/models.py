@@ -21,7 +21,7 @@ class Tweet(models.Model):
         return {
             "id": self.id,
             "content": self.content,
-            "date_posted": self.date_posted,
+            "date_posted": self.date_posted.strftime("%H:%M  -  %d/%m/%Y"),
             "user_username": self.author.username,
             "user_first_name": self.author.first_name,
             "user_last_name": self.author.last_name,

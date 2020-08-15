@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.http import  JsonResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.exceptions import ValidationError
 
 from tweets.forms import TweetForm
 from tweets.models import Tweet
@@ -146,3 +148,39 @@ def tweet_delete(request, tweet_id, *args, **kwargs):
         return JsonResponse({'message': 'TweeT deleted successfully!'})
     else:
         return JsonResponse({'message': "You can't delete tweet because you are not the owner!"})
+
+# Retweet Tweet
+@login_required
+def tweet_retweet(request, tweet_id, *args, **kwargs):
+    if request.method == "POST":
+        try:
+            tweet = Tweet.objects.filter(id=tweet_id).first()
+        except:
+            messages.warning(request, "Something went wrong with Server!")
+            return redirect('home')
+        
+        # If tweet doesn't exist return error message
+        if not tweet:
+            messages.warning(request, "This tweet doesn't exist anymore!")
+            return redirect('home')
+
+        # Ensure that retweet will be for a Tweet not a retweet
+        if tweet.retweet:
+            messages.warning(request, "You can't make a retweet for a retweet")
+            return redirect('home')
+
+        # Ensure that user will not enter false Info
+        try:
+            rt = Tweet.objects.create(
+                content=request.POST.get('content'),
+                author=request.user,
+                retweeted_tweet=tweet,
+                retweet=True
+            )
+        except ValidationError as e:
+            messages.warning(request, e)
+            return redirect('home')
+
+        rt.save()
+
+        return redirect('home')

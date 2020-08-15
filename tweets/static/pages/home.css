@@ -13,7 +13,7 @@ body {
 .search_input_tag {
     background-color: #253341;
     border: gray solid 1px;
-    border-radius: 3%;
+    border-radius: 10px;
     width: 70%;
     outline: none;
     color: white;
@@ -58,7 +58,7 @@ body {
 
 .create_tweet{
     display: block;
-    border-radius: 40%;
+    border-radius: 10px;
     margin-left: 10px;
     border-bottom: grey solid 0.5px;
 }
@@ -185,4 +185,30 @@ body {
 .deleted_tweet:hover {
     cursor: default;
     color: gray;
+}
+
+/* Retweet Form */
+
+.retweet_form {
+    width: 50%;
+    position: fixed; 
+    top: 20%; 
+    left: 25%;
+    z-index: 50; 
+    background-color: #15202B;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.retweet_form .tweet_container{
+    border-bottom: none;
+    border: 0.5px solid gray;
+    border-radius: 10px;
+}
+
+.retweet_cancel {
+    display: inline-block;
+    margin-top: 15px;
+    border-radius: 20px;
+    margin-right: 5px;
 }
