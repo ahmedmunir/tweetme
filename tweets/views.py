@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -184,3 +184,33 @@ def tweet_retweet(request, tweet_id, *args, **kwargs):
         rt.save()
 
         return redirect('home')
+
+# Edit Tweet
+@login_required
+def tweet_edit(request, tweet_id, *args, **kwargs):
+    try:
+        tweet = Tweet.objects.filter(id=tweet_id).first()
+    except:
+        raise Http404
+    
+    # Ensure that the owner of tweet who wants to edit it
+    if tweet.author != request.user:
+        return JsonResponse({
+            "message": "Error",
+            "content": "You can't Edit the tweet while you are not the Owner"
+        })
+    
+    # Ensure that there is a content sent by the user
+    elif len(request.POST.get('content')) == 0:
+        return JsonResponse({
+            "message": "Error",
+            "content": "You can't Post Empty Tweet"
+        })
+
+    print(request.POST.get('content'))
+    tweet.content = request.POST.get('content')
+    tweet.save()
+    return JsonResponse({
+        "message": "Done Editing",
+        "content": tweet.content
+    })

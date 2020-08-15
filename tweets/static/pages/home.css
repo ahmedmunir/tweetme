@@ -156,7 +156,6 @@ body {
 
 /* Retweet Style */
 .retweet_container {
-    /* display: block; */
     width: 100%;
     cursor: pointer;
     border: 1px solid gray;
@@ -189,7 +188,8 @@ body {
 
 /* Retweet Form */
 
-.retweet_form {
+.retweet_form,
+.edit_form {
     width: 50%;
     position: fixed; 
     top: 20%; 
@@ -200,15 +200,25 @@ body {
     border-radius: 10px;
 }
 
-.retweet_form .tweet_container{
+.retweet_form .tweet_container,
+.edit_form .tweet_container{
     border-bottom: none;
     border: 0.5px solid gray;
     border-radius: 10px;
 }
 
-.retweet_cancel {
+.retweet_cancel,
+.edit_cancel {
     display: inline-block;
     margin-top: 15px;
     border-radius: 20px;
     margin-right: 5px;
+}
+
+/* Edit button */
+.edit_tweet {
+    margin-right: 20px;
+}
+.edit_tweet:hover {
+    cursor: pointer;
 }
