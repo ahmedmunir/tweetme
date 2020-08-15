@@ -33,6 +33,8 @@ urlpatterns = [
     path('tweets/', include('tweets.urls')),
 
     # User URLS (register, login, logout)
+    path('<str:username>/', users_views.profile, name='user-profile'),
+    path('<str:username>/tweets/', users_views.user_tweets, name='user-tweets'),
     path('register/', users_views.register, name='register'),
     path('login/', users_views.loginCustom, name='login'),
     path('logout/', login_required(auth_views.LogoutView.as_view()), name='logout'),

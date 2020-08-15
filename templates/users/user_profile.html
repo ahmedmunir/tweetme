@@ -2,37 +2,53 @@
 
 <!-- Home Title -->
 {% block title %}
-    {% if user.is_authenticated %}
-        Home - @{{ user.username }}
-    {% else %}
-        TweeTME - Home
-    {% endif %}
+    Home - @{{ user.username }}
 {% endblock title %}
 
 <!-- Home static -->
 {% load static %}
 {% block extraStyle %}
     <link rel="stylesheet" href="{% static 'pages/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user-profile.css' %}">
 {% endblock extraStyle %}
 
 {% block content %}
-    <div class="search_box">
-        <input type="text" placeholder="search" name="search" class="search_input_tag">
-        <button class='btn btn-primary search'>Search</button>
-        <p class='wrong-alert'></p>
-        {% for message in messages %}
-            <p class='wrong-alert'>{{ message }}</p>
-        {% endfor %}
+    <div class='profile-container container p-4'>
+        <div class='row align-items-center'>
+            <div class='image_container col-4'>
+                <img class='user_image' src="{{ user.image.url }}" style="width: 70%">
+            </div>
+            <div class= 'user_info'>
+                <p class='mb-2'><span class='user-info'>Email: </span>{{user.email}}
+                    {% if user != request.user %}
+                        <button class='btn btn-primary follow_button ml-4'>Follow</button>
+                    {% endif %}
+                </p>
+                <p class='mb-2 user_username ' data-username="{{user.username}}"><span class='user-info'>Username:</span> {{user.username}}</p>
+                <p class='mb-2'><span class='user-info'>Gender:</span> 
+                    {% if user.gender == 1 %}
+                        Male
+                    {% elif user.gender == 2 %}
+                        Female
+                    {% endif %}
+                </p>
+                <p class='mb-1'><span class='user-info'>Full name:</span> {{user.first_name}} {{user.last_name}}</p>
+            </div>
+        </div>
+        <div class='info-container mt-4'>
+            <div class='row'>
+                <p class='col-3 text_center'><span class='user-info'>Followers:</span> 0</p>
+                <p class='col-3 text_center'><span class='user-info'>Following:</span> 0</p>
+                <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> {{user.date_joined}}</p>
+            </div>
+            {% if user.bio %}
+            <div class='row'>
+                <p class='col-12'>{{ user.bio }}</p>
+            </div>
+            {% endif %}
+        </div>
+    
     </div>
-    {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'tweet-create' %}">
-            {% csrf_token %}
-            <textarea name="content" id="id_content" placeholder="What is happening?"></textarea>
-            <button type="submit" class="btn btn-primary create_tweet" disabled>tweet</button>
-            <div class="line_break"></div>
-        </form>
-    {% endif %}
-
     <div id="tweets" class='panel-body'></div>
 {% endblock content %}
 
@@ -53,18 +69,6 @@
             ================
         */
 
-        // Disable Button Tweet while Characters are 0 or more than 250
-        // Ensure that user is already logged in to add event listener
-        if(document.querySelector('#id_content')){
-            document.querySelector('#id_content').addEventListener('keyup', e => {
-                if(e.target.value.length > 250 || e.target.value.length == 0){
-                    document.querySelector('.create_tweet').setAttribute('disabled', true);
-                } else {
-                    document.querySelector('.create_tweet').removeAttribute('disabled');
-                }
-            })
-        }
-
         // Loading more data when reaching to the end of page
         window.addEventListener('scroll', e => {
             if(window.scrollY + window.innerHeight >= document.body.offsetHeight) {
@@ -77,41 +81,6 @@
                 }
             }
         })
-
-        // Add new Tweet AJAX request
-        // Ensure that user is already logged in to add event listener
-        if(document.querySelector('.create_tweet')){
-            document.querySelector('.create_tweet').addEventListener('click', e => {
-                e.preventDefault();
-                
-                let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/create/`
-                let tweet_content = new FormData()
-                tweet_content.append('content', document.querySelector('#id_content').value);
-                
-                // Send new TweeT request
-                fetch(url, {
-                    method: "POST",
-                    body: tweet_content,
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken')
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-
-                    // Append new tweet if it was successful
-                    if(data['process'] == 'success') {
-                        
-                        add_tweet_to_dom('afterbegin', data['tweet']);
-                        document.querySelector('#id_content').value = '';
-
-                    } else if(data['process'] == 'failed') {
-                        document.querySelector('.wrong-alert').innerHTML = data['errors']['content'][0];
-                    }
-                })
-            })
-        }
-
 
         /*
         ==============
@@ -389,7 +358,7 @@
             document.querySelector('body').insertAdjacentElement('afterbegin', edit_form);
         }
 
-        //
+        // Retweet Function
         const retweet_function = (tweet) => {
 
             // Display backdrop window
@@ -507,7 +476,8 @@
             })
 
             // Fetch data from server
-            let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/?${params}`
+            let username = document.querySelector('.user_username').dataset.username;
+            let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/${username}/tweets/?${params}`;
             fetch(url, {
                 method: "GET",
                 headers: {
@@ -563,7 +533,7 @@
             // Tweet username
             let tweet_username = document.createElement('a');
             tweet_username.classList.add('tweet_username');
-            tweet_username.setAttribute('href', `/${tweet['user_username']}/`);
+            tweet_username.setAttribute('href', "#");
             tweet_username.innerHTML = `${tweet['user_first_name']} ${tweet['user_last_name']}`;
 
             // Tweet user unique name
@@ -649,7 +619,7 @@
                     // Retweet username
                     let retweet_username = document.createElement('a');
                     retweet_username.classList.add('retweet_username');
-                    retweet_username.setAttribute('href', `/${tweet['retweeted_tweet']['user_username']}`);
+                    retweet_username.setAttribute('href', "#");
                     retweet_username.innerHTML = `${tweet['retweeted_tweet']['user_first_name']} ${tweet['retweeted_tweet']['user_last_name']}`;
 
                     // Retweet user unique name

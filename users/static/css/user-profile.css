@@ -1,0 +1,19 @@
+.profile-container {
+    border-bottom: 1px solid gray;
+}
+.user_image {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info {
+    color: gray;
+}
+
+.text_center {
+    text-align: center;
+}
+
+.follow_button {
+    border-radius: 10px;
+}
