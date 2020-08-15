@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.http import Http404, JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from users.forms import UserRegisterForm
 from users.models import NewUser
@@ -49,7 +50,7 @@ def profile(request, username, *args, **kwargs):
     
     if not user:
         raise Http404
-
+    
     return render(request, 'users/user_profile.html', {"user": user})
 
 # List all Tweets
@@ -63,16 +64,19 @@ def user_tweets(request, username, *args, **kwargs):
         raise Http404
     if not user:
         raise Http404
-
     
     # Calculate the range of queryset according to user request 
+    # The Client side has start variable which define the last item we search for at DB
     quantity = 10
     start = int(request.GET.get('start'))
     last_index = Tweet.objects.last().pk
     end_range = last_index - start
     start_range = end_range - quantity
+
+    # Queryset depending on User then depending on range
     query_set = list(Tweet.objects.filter(author=user).filter(id__range=(start_range, end_range)).order_by("-date_posted"))
 
+    # Ensure that 10 data set will be returned to client side.
     if(len(query_set) < 10):
         start += quantity
         while(len(query_set) < 10 and start_range > 0):
@@ -94,3 +98,38 @@ def user_tweets(request, username, *args, **kwargs):
         'start': start
     }
     return JsonResponse(data)
+
+# Follow
+@login_required
+def user_follow(request, *args, **kwargs):
+
+    
+    if request.method == "POST":
+        state  = request.POST.get('state')
+        target = request.POST.get('target')
+
+        try:
+            target_user    = NewUser.objects.filter(username=target).first()
+        except:
+            return JsonResponse({
+                "state": "can't Follow or unfollow now"
+            })
+
+        # Ensure that no one will try to follow himself
+        if request.user != target_user:
+            # If the process is Follow
+            if state == 'Follow':
+
+                request.user.following.add(target_user)
+                request.user.save()
+                return JsonResponse({
+                    "state": "follow"
+                }) 
+
+            # If the procss is unfollow
+            elif state == 'Unfollow':
+                request.user.following.remove(target_user)
+                request.user.save()
+                return JsonResponse({
+                    "state": "unfollow"
+                })

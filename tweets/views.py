@@ -32,13 +32,17 @@ def tweet_list_view(request, *args, **kwargs):
     """
     
     # Calculate the range of queryset according to user request 
+    # The Client side has start variable which define the last item we search for at DB
     quantity = 10
     start = int(request.GET.get('start'))
     last_index = Tweet.objects.last().pk
     end_range = last_index - start
     start_range = end_range - quantity
+
+    # Queryset depending on range
     query_set = list(Tweet.objects.filter(id__range=(start_range, end_range)).order_by("-date_posted"))
 
+    # Ensure that 10 data set will be returned to client side.
     if(len(query_set) < 10):
         start += quantity
         while(len(query_set) < 10 and start_range > 0):

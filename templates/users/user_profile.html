@@ -21,7 +21,11 @@
             <div class= 'user_info'>
                 <p class='mb-2'><span class='user-info'>Email: </span>{{user.email}}
                     {% if user != request.user %}
-                        <button class='btn btn-primary follow_button ml-4'>Follow</button>
+                        {% if request.user in user.followed_by.all %}
+                            <button class='btn btn-danger follow_button ml-4'>Unfollow</button>
+                        {% else %}
+                            <button class='btn btn-primary follow_button ml-4'>Follow</button>
+                        {% endif %}
                     {% endif %}
                 </p>
                 <p class='mb-2 user_username ' data-username="{{user.username}}"><span class='user-info'>Username:</span> {{user.username}}</p>
@@ -37,13 +41,13 @@
         </div>
         <div class='info-container mt-4'>
             <div class='row'>
-                <p class='col-3 text_center'><span class='user-info'>Followers:</span> 0</p>
-                <p class='col-3 text_center'><span class='user-info'>Following:</span> 0</p>
+                <p class='col-3 text_center'><span class='user-info'>Followers:</span> <span class='followers'>{{ user.followed_by.count }}</span></p>
+                <p class='col-3 text_center'><span class='user-info'>Following:</span> <span class='following'>{{ user.following.count }}</span></p>
                 <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> {{user.date_joined}}</p>
             </div>
             {% if user.bio %}
             <div class='row'>
-                <p class='col-12'>{{ user.bio }}</p>
+                <p class='col-12 bio'>{{ user.bio }}</p>
             </div>
             {% endif %}
         </div>
@@ -81,6 +85,54 @@
                 }
             }
         })
+
+        // Follow or UnFollow
+        if(document.querySelector('.follow_button')){
+            document.querySelector('.follow_button').addEventListener('click', e => {
+                e.preventDefault();
+            
+                let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/follow/`;
+                let data = new FormData();
+                let state = document.querySelector('.follow_button').innerHTML;
+                let target = document.querySelector('.user_username').dataset.username; 
+                data.append('state', state);
+                data.append('target', target);
+            
+                fetch(url, {
+                    method: 'POST',
+                    body: data,
+            
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    
+                    // If follow process succeded 
+                    if(data['state'] == 'follow') {
+                        document.querySelector('.follow_button').classList.remove('btn-primary');
+                        document.querySelector('.follow_button').classList.add('btn-danger');
+                        document.querySelector('.follow_button').innerHTML = "Unfollow";
+
+                        // Increase number of followers
+                        document.querySelector('.followers').textContent =
+                        parseInt(document.querySelector('.followers').textContent) + 1;
+                    }
+            
+                    // If unfollow process succeded
+                    else if(data['state'] == 'unfollow') {
+                        document.querySelector('.follow_button').classList.add('btn-primary');
+                        document.querySelector('.follow_button').classList.remove('btn-danger');
+                        document.querySelector('.follow_button').innerHTML = "Follow"; 
+
+                        // Decrease number of followers
+                        document.querySelector('.followers').textContent =
+                        parseInt(document.querySelector('.followers').textContent) - 1;
+                    }
+                })
+            })
+        }
 
         /*
         ==============
