@@ -364,57 +364,67 @@
             }
 
             // Display Retweeted Tweet if it is a Retweet
-            console.log(`${tweet['id']} - ${tweet['retweet']}`);
             if(tweet['retweet']) {
-                var retweet_container = document.createElement('a');
-                retweet_container.classList.add('retweet_container');
-                retweet_container.classList.add('row');
-                retweet_container.setAttribute('data-id', tweet['retweet']['id']);
 
-                let retweet_Element = document.createElement('div');
-                retweet_Element.classList.add('col-7');
-                retweet_Element.classList.add('retext_username_container');
-                
+                // Display Retweeted Tweet if the original tweet exists
+                if(tweet['retweeted_tweet']){
+                    var retweet_container = document.createElement('a');
+                    retweet_container.classList.add('retweet_container');
+                    retweet_container.classList.add('row');
+                    retweet_container.setAttribute('data-id', tweet['retweeted_tweet']['id']);
 
-                // Retweet username
-                let retweet_username = document.createElement('a');
-                retweet_username.classList.add('retweet_username');
-                retweet_username.setAttribute('href', "#");
-                retweet_username.innerHTML = `${tweet['retweet']['user_first_name']} ${tweet['retweet']['user_last_name']}`;
+                    let retweet_Element = document.createElement('div');
+                    retweet_Element.classList.add('col-7');
+                    retweet_Element.classList.add('retext_username_container');
+                    
 
-                // Retweet user unique name
-                let retweet_unique_user = document.createElement('small');
-                retweet_unique_user.classList.add('retweet_user_unique');
-                retweet_unique_user.innerHTML = ` @${tweet['retweet']['user_username']}`;
+                    // Retweet username
+                    let retweet_username = document.createElement('a');
+                    retweet_username.classList.add('retweet_username');
+                    retweet_username.setAttribute('href', "#");
+                    retweet_username.innerHTML = `${tweet['retweeted_tweet']['user_first_name']} ${tweet['retweeted_tweet']['user_last_name']}`;
 
-                // Retweet Date
-                let retweet_date = document.createElement('small');
-                retweet_date.classList.add('retweet_date');
-                retweet_date.innerHTML = tweet['retweet']['date_posted'];
+                    // Retweet user unique name
+                    let retweet_unique_user = document.createElement('small');
+                    retweet_unique_user.classList.add('retweet_user_unique');
+                    retweet_unique_user.innerHTML = ` @${tweet['retweeted_tweet']['user_username']}`;
 
-                // Retweet Text
-                let retweet_text = document.createElement('p');
-                retweet_text.classList.add('retweet_text');
-                retweet_text.innerHTML = tweet['retweet']['content'];
+                    // Retweet Date
+                    let retweet_date = document.createElement('small');
+                    retweet_date.classList.add('retweet_date');
+                    retweet_date.innerHTML = tweet['retweeted_tweet']['date_posted'];
 
-                // Retweet image
-                // User image container
-                let rt_user_image = document.createElement('div');
-                rt_user_image.classList.add('col-1');
-                rt_user_image.classList.add('image_container');
-                let rt_image_url = tweet['retweet']['user_image'];
-                let rt_image = document.createElement('img');
-                rt_image.classList.add('user_tweet_image');
-                rt_image.setAttribute('src', rt_image_url);
-                rt_user_image.insertAdjacentElement('afterbegin', rt_image);
+                    // Retweet Text
+                    let retweet_text = document.createElement('p');
+                    retweet_text.classList.add('retweet_text');
+                    retweet_text.innerHTML = tweet['retweeted_tweet']['content'];
 
-                //append data to retweet element
-                retweet_Element.insertAdjacentElement('beforeend', retweet_username);
-                retweet_Element.insertAdjacentElement('beforeend', retweet_unique_user);
-                retweet_Element.insertAdjacentElement('beforeend', retweet_date);
-                retweet_Element.insertAdjacentElement('beforeend', retweet_text);
-                retweet_container.insertAdjacentElement('beforeend', rt_user_image);
-                retweet_container.insertAdjacentElement('beforeend', retweet_Element);
+                    // Retweet image
+                    // User image container
+                    let rt_user_image = document.createElement('div');
+                    rt_user_image.classList.add('col-1');
+                    rt_user_image.classList.add('image_container');
+                    let rt_image_url = tweet['retweeted_tweet']['user_image'];
+                    let rt_image = document.createElement('img');
+                    rt_image.classList.add('user_tweet_image');
+                    rt_image.setAttribute('src', rt_image_url);
+                    rt_user_image.insertAdjacentElement('afterbegin', rt_image);
+
+                    //append data to retweet element
+                    retweet_Element.insertAdjacentElement('beforeend', retweet_username);
+                    retweet_Element.insertAdjacentElement('beforeend', retweet_unique_user);
+                    retweet_Element.insertAdjacentElement('beforeend', retweet_date);
+                    retweet_Element.insertAdjacentElement('beforeend', retweet_text);
+                    retweet_container.insertAdjacentElement('beforeend', rt_user_image);
+                    retweet_container.insertAdjacentElement('beforeend', retweet_Element);
+                } else {
+
+                    // Display Text that the original tweet is 
+                    var retweet_container = document.createElement('div');
+                    retweet_container.classList.add('retweet_container');
+                    retweet_container.classList.add('deleted_tweet');
+                    retweet_container.innerHTML = 'The original Tweet was deleted!';
+                }
                 
             } else {
 

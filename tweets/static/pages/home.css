@@ -177,3 +177,12 @@ body {
     cursor: pointer;
     color: green;
 }
+
+.deleted_tweet {
+    color: gray;
+    font-style: italic;
+}
+.deleted_tweet:hover {
+    cursor: default;
+    color: gray;
+}

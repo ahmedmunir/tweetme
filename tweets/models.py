@@ -12,6 +12,7 @@ class Tweet(models.Model):
     likes               = models.ManyToManyField(NewUser, related_name='likes')
     dislikes            = models.ManyToManyField(NewUser, related_name='dislikes')
     retweeted_tweet     = models.ForeignKey("self", null=True, blank=True, on_delete=models.SET_NULL)
+    retweet             = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Tweet: {self.content}"
@@ -30,5 +31,6 @@ class Tweet(models.Model):
             "dislikes": self.dislikes.count(),
             "liked": "add" if user in self.likes.all() else "remove",
             "disliked": "add" if user in self.dislikes.all() else "remove",
-            "retweet": self.retweeted_tweet.serializer(user) if self.retweeted_tweet else self.retweeted_tweet
+            "retweeted_tweet": self.retweeted_tweet.serializer(user) if self.retweeted_tweet else self.retweeted_tweet,
+            "retweet": self.retweet
         }
