@@ -4,6 +4,8 @@
 .user_image {
     border-radius: 50%;
     object-fit: cover;
+    width: 180px;
+    height: 180px;
 }
 
 .user-info {

@@ -150,7 +150,8 @@ body {
     text-align: center;
 }
 .user_tweet_image {
-    width: 80%;
+    width: 43px;
+    height: 43px;
     border-radius: 50%;
     object-fit: cover;
 }

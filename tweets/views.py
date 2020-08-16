@@ -218,3 +218,10 @@ def tweet_edit(request, tweet_id, *args, **kwargs):
         "message": "Done Editing",
         "content": tweet.content
     })
+
+"""
+    Search View Function & Search 
+"""
+# Search for Tweets, Username, First & Last name
+def search_template(request, *args, **kwargs):
+    pass
