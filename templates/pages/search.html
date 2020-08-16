@@ -189,7 +189,7 @@
         }
 
         // Edit function
-        const edit_event_listener = (tweet) => {
+        const edit_event_listener = (tweet, e_event_handler) => {
             // Display backdrop window
             document.querySelector('.backdrop_window').style.display = 'block';
 
@@ -202,7 +202,7 @@
             let edit_text = document.createElement('textarea');
             edit_text.setAttribute('name', 'content');
             edit_text.setAttribute('id', 'id_content');
-            edit_text.innerHTML = tweet['content'];
+            edit_text.innerHTML = e_event_handler.target.closest('.text_username_container').childNodes[3].innerHTML;
 
             // Display retweet content if it is edit for retweet
             if(tweet['retweet']){
@@ -580,7 +580,7 @@
                 edit_button.addEventListener('click', e => {
                     e.preventDefault();
 
-                    edit_event_listener(tweet);
+                    edit_event_listener(tweet, e);
                 })
             }
 
