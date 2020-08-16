@@ -1,0 +1,46 @@
+.image-container {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 40px;
+    padding-top: 20px;
+    border-bottom: 1px solid gray;
+}
+
+.user-image {
+    border-radius: 50%;
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* Styling Form */
+#div_id_image a {
+    color: white;
+}
+
+#div_id_image a:hover {
+    color: white;
+}
+
+.form-container {
+    margin : 40px auto;
+    width: 80%;
+}
+
+input.form-control,
+#id_gender,
+textarea.form-control {
+    background-color: #253341;
+    color: white;
+}
+
+input.form-control:focus,
+textarea.form-control:focus {
+    background-color: #253341;
+    color: white;
+}
+
+input[type=checkbox],
+label[for=image-clear_id]{
+    display: none
+}

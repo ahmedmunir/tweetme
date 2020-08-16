@@ -72,7 +72,7 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
     gender          = models.IntegerField(choices=GENDER_CHOICES)
     first_name      = models.CharField(max_length=10, unique=False)
     last_name       = models.CharField(max_length=10, unique=False)
-    image           = models.ImageField(upload_to='profile_pics', null=True, blank=True)
+    image           = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     bio             = models.TextField(max_length=250, blank=True, null=True)
     following       = models.ManyToManyField("self", related_name="followed_by", symmetrical=False)   
 
@@ -101,8 +101,11 @@ class NewUser(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
 
-        if self.gender == 1:
-            self.image = 'male.jpg'
-        elif self.gender == 2:
-            self.image = 'female.jpg'
+        # Ensure that it is the first time to add image and creat User
+        if not self.image:
+            if self.gender == 1:
+                self.image = 'male.jpg'
+            elif self.gender == 2:
+                self.image = 'female.jpg'
+            return super(NewUser, self).save(*args, **kwargs)
         return super(NewUser, self).save(*args, **kwargs)

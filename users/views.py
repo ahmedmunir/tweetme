@@ -8,6 +8,7 @@ from users.forms import UserRegisterForm
 from users.models import NewUser
 from tweets.models import Tweet
 
+from users.forms import UserUpdateForm
 # Create your views here.
 
 # Register View
@@ -159,3 +160,25 @@ def user_followers(request, username, *args, **kwargs):
         raise Http404
 
     return render(request, "users/user_followers.html", {"user_followers": user_followers})
+
+# User Profile Edit
+@login_required
+def user_profile(request, *args, **kwargs):
+    if request.method == "POST":
+        u_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+
+        if u_form.is_valid():
+            
+            # Delete old image first
+            if 'profile_pics' in NewUser.objects.filter(username=request.user.username).first().image.url:
+                NewUser.objects.filter(username=request.user.username).first().image.delete(False)
+            
+            u_form.save()
+            messages.success(request, 'Your data updated successfully!')
+            return redirect('edit_profile')
+        else:
+            messages.error(request, "Can't update your Profile")
+            return render(request, 'users/edit_profile.html', {"u_form": u_form})
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        return render(request, 'users/edit_profile.html', {"u_form": u_form})

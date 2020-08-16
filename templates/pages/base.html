@@ -28,7 +28,7 @@
           <h4>Home</h4>
         </a>
         {% if user.is_authenticated %}
-          <a class="link_redirect" href="#">
+          <a class="link_redirect" href="{% url 'edit_profile' %}">
             <h4>Profile</h4>
           </a>
           <a class="link_redirect" href="{% url 'logout' %}">

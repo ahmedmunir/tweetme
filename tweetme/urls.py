@@ -33,14 +33,16 @@ urlpatterns = [
     path('tweets/', include('tweets.urls')),
 
     # User URLS (register, login, logout)
+    path('profile/', users_views.user_profile, name="edit_profile"),
     path('follow/', users_views.user_follow, name='user-follow'),
     path('register/', users_views.register, name='register'),
     path('login/', users_views.loginCustom, name='login'),
     path('logout/', login_required(auth_views.LogoutView.as_view()), name='logout'),
     path('<str:username>/', users_views.profile, name='user-profile'),
     path('<str:username>/tweets/', users_views.user_tweets, name='user-tweets'),
-    path('<str:username>/following', users_views.user_following, name='user-following'),
-    path('<str:username>/followers', users_views.user_followers, name="user-followed_by"),
+    path('<str:username>/following/', users_views.user_following, name='user-following'),
+    path('<str:username>/followers/', users_views.user_followers, name="user-followed_by"),
+    
 
     
     path('password-reset/',
