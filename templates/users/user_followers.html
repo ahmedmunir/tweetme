@@ -14,7 +14,7 @@
 
 {% block content %}
     <div class="header_user_following">    
-        <h5 class="header_user">{{ user_followers.first_name }} {{ user_followers.last_name}} following: {{ user_followers.followed_by.count }}</h5>
+        <h5 class="header_user">{{ user_followers.first_name }} {{ user_followers.last_name}} followed by: {{ user_followers.followed_by.count }}</h5>
         <h5 class="header_username" style="color: gray">@{{ user_followers.username }}</h5>
     </div>
     <div class='following_links'>

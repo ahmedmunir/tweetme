@@ -38,3 +38,8 @@ input.form-control:focus {
     font-size: 13px;
     color: red;
 }
+
+.forget_password,
+.forget_password:hover {
+    color: white;
+}

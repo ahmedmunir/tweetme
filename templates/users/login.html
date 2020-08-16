@@ -34,6 +34,7 @@
                     <input autocomplete="current-password" type="password" class="form-control" id="id_password" required name='password' placeholder="Password">
                 </div>
                 <button type="submit" class="btn btn-primary">Log in</button>
+                <a class='ml-2 forget_password' href="{% url 'password_reset' %}">Forget Password</a>
             </form>
             <div class='register_redirect mt-3 border-top pt-3'>
                 <p class='register_text'>Need An Account? <a class='ml-2' href="{% url 'register' %}">Register</a></p>
