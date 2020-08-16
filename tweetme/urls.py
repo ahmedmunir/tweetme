@@ -32,6 +32,27 @@ urlpatterns = [
     # Tweets urls
     path('tweets/', include('tweets.urls')),
 
+    # Password change & Reset URLS
+    path('password_reset/',
+    auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
+    name='password_reset'),
+
+    path('password_reset/done/',
+    auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html')),
+
+    path('password_reset_confirm/<uidb64>/<token>/',
+    auth_views.PasswordResetConfirmView.as_view(template_name="users/password_reset_confirm.html")),
+
+    path('password_change/',
+    login_required(auth_views.PasswordChangeView.as_view(
+        template_name='users/password_change.html'
+    )), name='password_change'),
+
+    path('password_change_done/',
+    login_required(auth_views.PasswordChangeDoneView.as_view(
+        template_name="users/password_change_done.html"
+    )), name='password_change_done'),
+
     # User URLS (register, login, logout)
     path('profile/', users_views.user_profile, name="edit_profile"),
     path('follow/', users_views.user_follow, name='user-follow'),
@@ -43,29 +64,6 @@ urlpatterns = [
     path('<str:username>/following/', users_views.user_following, name='user-following'),
     path('<str:username>/followers/', users_views.user_followers, name="user-followed_by"),
     
-
-    
-    path('password-reset/',
-    auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
-    name='password-reset'),
-
-    path('password-reset/done/',
-    auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html')),
-
-    path('password-reset-confirm/<uidb64>/<token>/',
-    auth_views.PasswordResetConfirmView.as_view(template_name="users/password_reset_confirm.html")),
-
-    path('password-change/',
-    login_required(auth_views.PasswordChangeView.as_view(
-        template_name='users/password_change.html'
-    )), name='password-change'),
-
-    path('password-change-done/',
-    login_required(auth_views.PasswordChangeDoneView.as_view(
-        template_name="users/password_change_done.html"
-    )), name='password-change-done')
-
-
 
 ]
 

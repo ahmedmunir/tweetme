@@ -31,7 +31,8 @@
         <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ u_form|crispy }}
-            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary mr-2">Update</button>
+            <a class='btn btn-primary' href="{% url 'password_change' %}">Change password</a>
         </form>
     </div>
 {% endblock content %}
