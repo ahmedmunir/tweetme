@@ -177,7 +177,6 @@ def user_profile(request, *args, **kwargs):
             messages.success(request, 'Your data updated successfully!')
             return redirect('edit_profile')
         else:
-            messages.error(request, "Can't update your Profile")
             return render(request, 'users/edit_profile.html', {"u_form": u_form})
     else:
         u_form = UserUpdateForm(instance=request.user)

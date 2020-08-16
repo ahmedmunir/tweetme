@@ -26,7 +26,7 @@
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}" role="alert">
                 {{ message }}
-          </div>
+            </div>
         {% endfor %}
         <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
             {% csrf_token %}
