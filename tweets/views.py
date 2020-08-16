@@ -3,6 +3,7 @@ from django.http import JsonResponse, Http404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from tweets.forms import TweetForm
 from tweets.models import Tweet
@@ -211,7 +212,6 @@ def tweet_edit(request, tweet_id, *args, **kwargs):
             "content": "You can't Post Empty Tweet"
         })
 
-    print(request.POST.get('content'))
     tweet.content = request.POST.get('content')
     tweet.save()
     return JsonResponse({
@@ -220,8 +220,55 @@ def tweet_edit(request, tweet_id, *args, **kwargs):
     })
 
 """
-    Search View Function & Search 
+    Search View Function & Search Template
 """
 # Search for Tweets, Username, First & Last name
 def search_template(request, *args, **kwargs):
-    pass
+    search_value = request.GET.get('search')
+    return render(request, 'pages/search.html', {"q": search_value})
+
+# List all Tweets got by search
+def search_list_tweets(request, *args, **kwargs):
+    """
+        REST API View for all Tweets
+    """
+    
+    # Calculate the range of queryset according to user request 
+    # The Client side has start variable which define the last item we search for at DB
+    quantity = 10
+    start = int(request.GET.get('start'))
+    last_index = Tweet.objects.last().pk
+    end_range = last_index - start
+    start_range = end_range - quantity
+    q = request.GET.get('search')
+
+    # Queryset depending on range
+    query_set = list(Tweet.objects.filter(Q(content__icontains=q)).filter(id__range=(start_range, end_range)).order_by("-date_posted"))
+
+    # Ensure that 10 data set will be returned to client side.
+    if(len(query_set) < 10):
+        start += quantity
+        while(len(query_set) < 10 and start_range > 0):
+            try:
+                new_data = Tweet.objects.filter(
+                    Q(content__icontains=q) |
+                    Q(author__username__icontains=q) |
+                    Q(author__first_name__icontains=q) |
+                    Q(author__last_name__icontains=q)
+                ).filter(id=start_range).first()
+            except:
+                new_data = []
+            if(new_data):
+                query_set.append(new_data)
+            start_range -= 1
+            start += 1
+    else:
+        start += quantity
+
+    # Convert tweets queryset into list to be able to send it through JSON
+    tweets = [ tweet.serializer(request.user) for tweet in query_set]
+    data = {
+        "tweets": tweets,
+        'start': start
+    }
+    return JsonResponse(data)
