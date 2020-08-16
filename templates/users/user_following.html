@@ -22,18 +22,18 @@
         {% for user_to_follow in user_following.following.all %}
             <div class='container user_container' data-username="{{ user_to_follow.username }}">
                 <div class='row'>
-                    <div class='col-1'>
+                    <div class='col-xl-1 col-lg-1 col-md-2 col-sm-2 col-2'>
                         <img class='username_image' src="{{ user_to_follow.image.url }}">
                     </div>
-                    <div class='col-11'>
+                    <div class='col-xl-11 col-lg-11 col-md-10 col-sm-10 col-10'>
                         <div class='row'>
-                            <div class='col-10'>
+                            <div class='col-xl-10 col-lg-9 col-md-8 col-sm-7 col-7'>
                                 <a href="{% url 'user-profile' user_to_follow.username %}" class='user_link'>
                                     {{ user_to_follow.first_name }} {{ user_to_follow.last_name }}
                                 </a>
                                 <p class='user_username'>@{{ user_to_follow.username }}</p>
                             </div>
-                            <div class='col-2'>
+                            <div class='col-xl-2 col-lg-3 col-md-4 col-sm-5 col-5'>
                                 {% if request.user.is_authenticated %}
                                     {% if request.user != user_to_follow %}
                                         {% if request.user in user_to_follow.followed_by.all %}

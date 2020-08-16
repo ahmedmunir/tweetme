@@ -224,3 +224,56 @@ body {
 .edit_tweet:hover {
     cursor: pointer;
 }
+
+/* Responsive Styles */
+@media (min-width: 1017px) {
+    .user_tweet_image {
+        width: 43px;
+        height: 43px;
+    }
+}
+
+@media (max-width: 1016px) {
+    .nav_links {
+        width: 250px;
+    }
+
+    .nav_tweets {
+        margin-left: 250px;
+    }
+
+    .user_tweet_image {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 950px) {
+    .nav_links {
+        width: 150px;
+        padding-left: 35px;
+    }
+
+    .nav_tweets {
+        margin-left: 150px;
+    }
+
+    .user_tweet_image {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 782px) {
+    .col-md-11{
+        max-width: 80%;
+        width: 90%;
+    }
+    .col-md-1 {
+        max-width: 40%;
+        width: 10%;
+    }
+    body {
+        font-size: 13px;
+    }
+}

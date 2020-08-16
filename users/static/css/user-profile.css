@@ -27,3 +27,38 @@ a.user_follow_count:hover {
     color: white;
     text-decoration: underline;
 }
+
+/* Responsive */
+@media (max-width: 960px) {
+    .user_info.col-sm-12.col-lg-8 {
+        margin-top: 20px;
+        margin-right: 10%;
+        margin-left: 10%;
+    }
+
+}
+
+/* Responsive */
+@media (max-width: 990px) {
+    .user_info.col-sm-12.col-lg-8 {
+        margin-top: 20px;
+        margin-right: 15%;
+        margin-left: 15%;
+    }
+
+}
+
+@media (max-width: 1000px) {
+    .date_join,
+    .user_follow_count {
+        display: block;
+    }
+}
+
+@media (max-width: 570px) {
+    .user_info.col-sm-12.col-lg-8 {
+        margin-top: 20px;
+        margin-right: 5%;
+        margin-left: 5%;
+    }
+}

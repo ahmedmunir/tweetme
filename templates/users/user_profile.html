@@ -15,10 +15,10 @@
 {% block content %}
     <div class='profile-container container p-4'>
         <div class='row align-items-center'>
-            <div class='image_container col-4'>
+            <div class='image_container col-sm-12 col-lg-4'>
                 <img class='user_image' src="{{ selected_user.image.url }}">
             </div>
-            <div class= 'user_info'>
+            <div class= 'user_info col-sm-12 col-lg-8'>
                 <p class='mb-2'><span class='user-info'>Email: </span>{{selected_user.email}}
                     {% if request.user.is_authenticated %}
                         {% if selected_user != request.user %}
@@ -53,7 +53,7 @@
                         {{ selected_user.following.count }}
                     </a>
                 </p>
-                <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> {{selected_user.date_joined}}</p>
+                <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> <span class='date_join'>{{selected_user.date_joined}}</span></p>
             </div>
             {% if selected_user.bio %}
             <div class='row'>
