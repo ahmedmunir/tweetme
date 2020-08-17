@@ -47,12 +47,12 @@
             <div class='row'>
                 <p class='col-3 text_center'>
                     <a class='user_follow_count' href="{% url 'user-followed_by' selected_user.username %}">
-                        <span class='user-info'>Followers:</span><span class='followers'>{{ selected_user.followed_by.count }}</span>
+                        <span class='user-info'>Followers: </span><span class='followers'>{{ selected_user.followed_by.count }}</span>
                     </a>
                 </p>
                 <p class='col-3 text_center'>
                     <a class='user_follow_count' href="{% url 'user-following' selected_user.username %}">
-                        <span class='user-info'>Following:</span><span class='following'>{{ selected_user.following.count }}</span>
+                        <span class='user-info'>Following: </span><span class='following'>{{ selected_user.following.count }}</span>
                     </a>
                 </p>
                 <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> <span class='date_join'>{{selected_user.date_joined}}</span></p>
