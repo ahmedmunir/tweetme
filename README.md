@@ -4,6 +4,7 @@ TweeTME is a simpler version website of [Twitter](https://twitter.com/) website.
 ## Technologies used:
 - Django
 - Django Rest framework
+- PostgreSQL
 - JavaScript
 - HTML / HTmL5
 - CSS / CSS3
