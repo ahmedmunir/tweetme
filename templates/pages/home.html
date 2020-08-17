@@ -16,24 +16,21 @@
 {% endblock extraStyle %}
 
 {% block content %}
-    <form class="search_box" method="GET" action="{% url 'search_template' %}">
-        <input type="text" value = "{{ q }}" placeholder="search" name="search" class="search_input_tag">
-        <button class='btn btn-primary search' type="submit">Search</button>
+    {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'tweet-create' %}" class='tweet_create_container'>
+            {% csrf_token %}
+            <textarea name="content" id="id_content" placeholder="What is happening?"></textarea>
+            <button type="submit" class="create_tweet" disabled>Tweet</button>
+        </form>
+    {% endif %}
+
+
+    <div id="tweets" class='panel-body'>
         <p class='wrong-alert'></p>
         {% for message in messages %}
             <p class='wrong-alert'>{{ message }}</p>
         {% endfor %}
-    </form>
-    {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'tweet-create' %}">
-            {% csrf_token %}
-            <textarea name="content" id="id_content" placeholder="What is happening?"></textarea>
-            <button type="submit" class="btn btn-primary create_tweet" disabled>tweet</button>
-            <div class="line_break"></div>
-        </form>
-    {% endif %}
-
-    <div id="tweets" class='panel-body'></div>
+    </div>
 {% endblock content %}
 
 {% block extraScript %}

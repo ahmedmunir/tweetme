@@ -12,15 +12,6 @@
 {% endblock extraStyle %}
 
 {% block content %}
-    <form class="search_box" method="GET" action="{% url 'search_template' %}">
-        <input type="text" value="{{ q }}" placeholder="search" name="search" class="search_input_tag">
-        <button type='submit' class='btn btn-primary search'>Search</button>
-        <p class='wrong-alert'></p>
-        {% for message in messages %}
-            <p class='wrong-alert'>{{ message }}</p>
-        {% endfor %}
-    </form>
-
 
     <div id="tweets" class='panel-body'></div>
 {% endblock content %}
