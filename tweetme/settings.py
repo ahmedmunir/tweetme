@@ -160,7 +160,7 @@ AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 
 AWS_S3_REGION_NAME = 'eu-central-1' #change to your region of bucket you created
-AWS_S3_SIGNATURE_VERSION = 's3v4'
+# AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 # To avoid overrite of files that have the same name
 AWS_S3_FILE_OVERWRITE = False
