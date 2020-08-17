@@ -47,7 +47,9 @@
                         </div>
                         <div class='row'>
                             <div class='col-12'>
-                                {{ user_to_follow.bio}}
+                                {% if user_to_follow.bio %}
+                                    {{ user_to_follow.bio}}
+                                {% endif %}
                             </div>
                             
                         </div>
