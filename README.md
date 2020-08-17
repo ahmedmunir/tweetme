@@ -5,7 +5,7 @@ TweeTME is a simpler version website of [Twitter](https://twitter.com/) website.
 - Add Tweet.
 - Edit Tweet.
 - Delete Tweet.
-- Retweet.
+- Retweet (You can retweet for a tweet, but you can't for a retweet).
 - Like Tweet.
 - Dislike Tweet.
 

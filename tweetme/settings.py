@@ -46,7 +46,8 @@ INSTALLED_APPS = [
 
     # Third party packages
     'rest_framework',
-    'crispy_forms'
+    'crispy_forms',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -151,4 +152,18 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # Heroku Configuration
 import django_heroku
-django_heroku.settings(locals()) 
+django_heroku.settings(locals())
+
+# AWS configuration
+AWS_ACCESS_KEY_ID = config.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = config.get('AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_REGION_NAME = 'eu-central-1' #change to your region of bucket you created
+AWS_S3_SIGNATURE_VERSION = 's3v4'
+
+# To avoid overrite of files that have the same name
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
