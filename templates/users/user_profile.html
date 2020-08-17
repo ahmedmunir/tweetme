@@ -28,7 +28,7 @@
                                 <button class='btn btn-primary follow_button ml-4'>Follow</button>
                             {% endif %}
                         {% elif selected_user == request.user %}
-                            <a button class = 'btn btn-primary follow_button ml-4'>Edit</a>
+                            <a href="{% url 'edit_profile' %}" class = 'btn btn-primary follow_button ml-4'>Edit Profile</a>
                         {% endif %}
                     {% endif %}
                 </p>
