@@ -27,6 +27,8 @@
                             {% else %}
                                 <button class='btn btn-primary follow_button ml-4'>Follow</button>
                             {% endif %}
+                        {% elif selected_user == request.user %}
+                            <a button class = 'btn btn-primary follow_button ml-4'>Edit</a>
                         {% endif %}
                     {% endif %}
                 </p>
@@ -43,14 +45,14 @@
         </div>
         <div class='info-container mt-4'>
             <div class='row'>
-                <p class='col-3 text_center'><span class='user-info'>Followers:</span>
+                <p class='col-3 text_center'>
                     <a class='user_follow_count followers' href="{% url 'user-followed_by' selected_user.username %}">
-                        {{ selected_user.followed_by.count }}
+                        <span class='user-info'>Followers:</span>{{ selected_user.followed_by.count }}
                     </a>
                 </p>
-                <p class='col-3 text_center'><span class='user-info'>Following:</span>
+                <p class='col-3 text_center'>
                     <a class='user_follow_count following' href="{% url 'user-following' selected_user.username %}">
-                        {{ selected_user.following.count }}
+                        <span class='user-info'>Following:</span>{{ selected_user.following.count }}
                     </a>
                 </p>
                 <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> <span class='date_join'>{{selected_user.date_joined}}</span></p>
