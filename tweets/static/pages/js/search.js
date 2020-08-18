@@ -172,6 +172,8 @@ const edit_event_listener = (tweet, e_event_handler) => {
     let edit_text = document.createElement('textarea');
     edit_text.setAttribute('name', 'content');
     edit_text.setAttribute('id', 'id_content');
+    edit_text.setAttribute('placeholder', 'Add a comment');
+    edit_text.classList.add('edit_text_textarea');
     edit_text.innerHTML = e_event_handler.target.closest('.text_username_container').childNodes[3].innerHTML;
 
     // Display retweet content if it is edit for retweet
@@ -228,8 +230,7 @@ const edit_event_listener = (tweet, e_event_handler) => {
     let edit_button = document.createElement('button');
     edit_button.setAttribute('type', 'submit');
     edit_button.classList.add('btn');
-    edit_button.classList.add('btn-primary');
-    edit_button.classList.add('edit_cancel');
+    edit_button.classList.add('edit_submit');
     edit_button.innerHTML = 'Edit';
     // Add Event Listener for Edit button
     edit_button.addEventListener('click', e => {
@@ -331,7 +332,8 @@ const retweet_function = (tweet) => {
         let retweet_comment = document.createElement('textarea');
         retweet_comment.setAttribute('name', 'content');
         retweet_comment.setAttribute('id', 'id_content');
-        retweet_comment.setAttribute('placeholder', 'Add your comment');
+        retweet_comment.setAttribute('placeholder', 'Add a comment');
+        retweet_comment.classList.add('edit_text_textarea');
 
         // Tweet Element Container
         let tweet_Element = document.createElement('div');
@@ -379,12 +381,10 @@ const retweet_function = (tweet) => {
         let retweet_button = document.createElement('button');
         retweet_button.setAttribute('type', 'submit');
         retweet_button.classList.add('btn');
-        retweet_button.classList.add('btn-primary');
-        retweet_button.classList.add('retweet_cancel');
+        retweet_button.classList.add('retweet_submit');
         retweet_button.innerHTML = 'Retweet';
         let cancel_retweet_button = document.createElement('button');
         cancel_retweet_button.classList.add('btn');
-        cancel_retweet_button.classList.add('btn-danger');
         cancel_retweet_button.classList.add('retweet_cancel');
         cancel_retweet_button.innerHTML = 'Cancel';
 

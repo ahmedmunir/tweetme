@@ -202,11 +202,36 @@ body {
 }
 
 .retweet_cancel,
-.edit_cancel {
+.edit_cancel,
+.edit_submit,
+.retweet_submit {
     display: inline-block;
     margin-top: 15px;
-    border-radius: 20px;
-    margin-right: 5px;
+    border-radius: 10px;
+    margin-right: 10px;
+    width: 80px;
+}
+
+.retweet_cancel,
+.retweet_cancel:hover,
+.retweet_cancel:focus,
+.edit_cancel,
+.edit_cancel:hover,
+.edit_cancel:focus {
+    color: #4A7CCA;
+    border: 1px solid #4A7CCA;
+    background-color: #2B3445;
+}
+
+.edit_submit,
+.edit_submit:hover,
+.edit_submit:focus,
+.retweet_submit,
+.retweet_submit:hover,
+.retweet_submit:focus{
+    color: white;
+    border: rgba(88,150,255,1);
+    background: linear-gradient(90deg, rgba(88,150,255,1) 0%, rgba(142,7,255,1) 100%);
 }
 
 /* Edit button */
@@ -215,6 +240,11 @@ body {
 }
 .edit_tweet:hover {
     cursor: pointer;
+}
+
+#id_content.edit_text_textarea {
+    background-color: #15202B;
+    border-bottom: none;
 }
 
 /* Responsive Styles */
