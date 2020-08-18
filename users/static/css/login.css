@@ -4,42 +4,66 @@ body {
 }
 
 .login_container {
-    width: 60%;
+    width: 40%;
     padding-top: 50px;
     padding-bottom: 50px;
 }
 
-.login_header {
+.image_container {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
+    margin-top: 120px;
 }
 
-.login_link {
-    color: white;
-}
-.login_link:hover {
-    color: white;
-    text-decoration: none;
+label[for='id_email'],
+label[for='id_password'] {
+    color: #5a6e8e;
+    font-size: 1.2rem;
+    width: 24%;
+    display: inline-block;
 }
 
-.form-group {
-    margin-bottom: 30px;
-}
-input.form-control {
-    background-color: #253341;
-    color: white;
-}
+input.form-control,
 input.form-control:focus {
     background-color: #253341;
     color: white;
+    border: 1px solid #4F8AE3;
+    outline: none;
 }
 
-.error {
-    font-size: 13px;
-    color: red;
+input.form-control {
+    display: inline-block;
+    width: 75%;
+    margin-bottom: 30px;
+}
+
+.login_button,
+.login_button:hover {
+    color: white;
+    border: rgba(88,150,255,1);
+    background: linear-gradient(90deg, rgba(88,150,255,1) 0%, rgba(142,7,255,1) 100%);
+    width: 100px;
+    display: block;
+    margin-left: auto;
+    font-size: 1.2rem;
+}
+
+.register_redirect {
+    width: 75%;
+    margin-left: auto;
+    margin-top: 50px;
+    font-size: 1.2rem;
+    color: #5a6e8e;
 }
 
 .forget_password,
 .forget_password:hover {
-    color: white;
+    color: #5a6e8e;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.register_link,
+.register_link:hover {
+    color:#4F8AE3;
 }

@@ -15,7 +15,11 @@
     </head>
     <body>
         <div class='container login_container'>
-            <h2 class='login_header'>Join <a href="{% url 'home' %}" class="login_link">TME <i class="fa fa-envelope"></i></a></h2>
+            <div class='mb-5 image_container'>
+                <a class="d-inline-block" href="{% url 'home' %}">
+                    <img src='/media/Group 6.png'>
+                  </a>
+            </div>
             {% for message in messages %}
                 {% if message.tags == 'error' %}
                     <div class='alert alert-danger'>{{ message }}</div>
@@ -26,18 +30,21 @@
             <form method="POST" action="{% url 'login' %}">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="id_email">Email address:</label>
+                    <label for="id_email">E-mail</label>
                     <input required type="text" name='email' maxlength="60" class="form-control" id="id_email" aria-describedby="emailHelp" placeholder="Enter email" autocomplete="email">
                 </div>
                 <div class="form-group">
-                    <label for="id_password">Password:</label>
+                    <label for="id_password">Password</label>
                     <input autocomplete="current-password" type="password" class="form-control" id="id_password" required name='password' placeholder="Password">
                 </div>
-                <button type="submit" class="btn btn-primary">Log in</button>
-                <a class='ml-2 forget_password' href="{% url 'password_reset' %}">Forget Password</a>
+                <div class='form-group'>
+                    <button type="submit" class="btn login_button">Log in</button>
+                </div>
+                
             </form>
-            <div class='register_redirect mt-3 border-top pt-3'>
-                <p class='register_text'>Need An Account? <a class='ml-2' href="{% url 'register' %}">Register</a></p>
+            <div class='register_redirect'>
+                <a class='forget_password' href="{% url 'password_reset' %}">Forget Password</a>
+                <p class='register_text'>Need An Account? <a class='register_link' href="{% url 'register' %}">Register</a></p>
             </div>
         </div>
     </body>
