@@ -170,7 +170,7 @@ def user_profile(request, *args, **kwargs):
         if u_form.is_valid():
             
             # Delete old image first
-            if 'profile_pics' in NewUser.objects.filter(username=request.user.username).first().image.url and request.FILES:
+            if 'profile_pics' in NewUser.objects.filter(id=request.user.id).first().image.url and request.FILES:
                 NewUser.objects.filter(username=request.user.username).first().image.delete(False)
             
             u_form.save()
