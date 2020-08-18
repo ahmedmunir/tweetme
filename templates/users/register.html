@@ -18,7 +18,8 @@
         <div class='container register_container'>
             <div class='mb-5 image_container'>
                 <a class="d-inline-block" href="{% url 'home' %}">
-                    <img src='/media/tweetmelogo.png'>
+                    {% load static %}
+                    <img src="{% static 'img/tweetmelogo.png' %}">
                   </a>
             </div>
             <form method="POST" action="{% url 'register' %}">

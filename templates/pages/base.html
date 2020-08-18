@@ -23,7 +23,8 @@
     <div class='row'>
       <div class='col-sm-3 col-md-3 col-lg-3 nav_links'>
         <a class="link_redirect d-inline-block mb-5" href="{% url 'home' %}">
-          <img src='/media/tweetmelogo.png'>
+          {% load static %}
+          <img src="{% static 'img/tweetmelogo.png' %}">
         </a>
         <form class="search_box" method="GET" action="{% url 'search_template' %}">
           <input type="text" value = "{{ q }}" placeholder="search" name="search" class="search_input_tag">
