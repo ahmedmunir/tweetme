@@ -90,43 +90,46 @@ const react_tweet = (react_button) => {
         .then(data => {
 
             // If tweet deleted before we react
-            if(data['message']) {
-                document.querySelector('.wrong-alert').innerHTML = data['message'];
-            } else {
-                
-                targeted_element = e.target.closest('.text_username_container');
-                len_of_elements = targeted_element.childNodes.length
 
-                // Because we don't know if it is a retweet or normal Tweet
-                // we will depend existence of retweet_container class or not
-
-                if(targeted_element.innerHTML.includes('retweet_container')){
-
-                    // Change link button state
-                    targeted_element.childNodes[5].classList[data['like']]('react_color');
-                    
-                    // change number of likes
-                    targeted_element.childNodes[6].innerHTML = data['likes'];
-                    
-                    // change dislike button state
-                    targeted_element.childNodes[7].classList[data['dislike']]('react_color');
-                    
-                    // change number of dislikes
-                    targeted_element.childNodes[8].innerHTML = data['dislikes'];
+            if(data != undefined) {
+                if(data['message']) {
+                    document.querySelector('.wrong-alert').innerHTML = data['message'];
                 } else {
+                    
+                    targeted_element = e.target.closest('.text_username_container');
+                    len_of_elements = targeted_element.childNodes.length
 
-                    // Change link button state
-                    targeted_element.childNodes[4].classList[data['like']]('react_color');
-                    
-                    // change number of likes
-                    targeted_element.childNodes[5].innerHTML = data['likes'];
-                    
-                    // change dislike button state
-                    targeted_element.childNodes[6].classList[data['dislike']]('react_color');
-                    
-                    // change number of dislikes
-                    targeted_element.childNodes[7].innerHTML = data['dislikes'];
+                    // Because we don't know if it is a retweet or normal Tweet
+                    // we will depend existence of retweet_container class or not
 
+                    if(targeted_element.innerHTML.includes('retweet_container')){
+
+                        // Change link button state
+                        targeted_element.childNodes[5].classList[data['like']]('react_color');
+                        
+                        // change number of likes
+                        targeted_element.childNodes[6].innerHTML = data['likes'];
+                        
+                        // change dislike button state
+                        targeted_element.childNodes[7].classList[data['dislike']]('react_color');
+                        
+                        // change number of dislikes
+                        targeted_element.childNodes[8].innerHTML = data['dislikes'];
+                    } else {
+
+                        // Change link button state
+                        targeted_element.childNodes[4].classList[data['like']]('react_color');
+                        
+                        // change number of likes
+                        targeted_element.childNodes[5].innerHTML = data['likes'];
+                        
+                        // change dislike button state
+                        targeted_element.childNodes[6].classList[data['dislike']]('react_color');
+                        
+                        // change number of dislikes
+                        targeted_element.childNodes[7].innerHTML = data['dislikes'];
+
+                    }
                 }
             }
         })
