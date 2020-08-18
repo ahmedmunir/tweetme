@@ -36,9 +36,9 @@
                                 {% if request.user.is_authenticated %}
                                     {% if request.user != user_to_follow %}
                                         {% if request.user in user_to_follow.followed_by.all %}
-                                            <button class='btn btn-danger follow_button'>Unfollow</button>
+                                            <button class='btn follow_button unfollow'>Unfollow</button>
                                         {% else %}
-                                            <button class='btn btn-primary follow_button'>Follow</button>
+                                            <button class='btn follow_button follow'>Follow</button>
                                         {% endif %}
                                     {% endif %}
                                 {% endif %}

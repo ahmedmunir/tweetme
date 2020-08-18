@@ -43,3 +43,18 @@ div.col-1{
     color: gray;
 }
 
+.unfollow,
+.unfollow:hover,
+.unfollow:focus {
+    color: white;
+    border: rgba(88,150,255,1);
+    background: linear-gradient(90deg, rgba(88,150,255,1) 0%, rgba(142,7,255,1) 100%);
+}
+
+.follow,
+.follow:hover,
+.follow:focus {
+    color: #4A7CCA;
+    border: 1px solid #4A7CCA;
+    background-color: #2B3445;
+}

@@ -40,15 +40,15 @@ if(document.querySelector('.follow_button')){
             
             // If follow process succeded 
             if(data['state'] == 'follow') {
-                document.querySelector('.follow_button').classList.remove('btn-primary');
-                document.querySelector('.follow_button').classList.add('btn-danger');
+                document.querySelector('.follow_button').classList.remove('follow');
+                document.querySelector('.follow_button').classList.add('unfollow');
                 document.querySelector('.follow_button').innerHTML = "Unfollow";
             }
     
             // If unfollow process succeded
             else if(data['state'] == 'unfollow') {
-                document.querySelector('.follow_button').classList.add('btn-primary');
-                document.querySelector('.follow_button').classList.remove('btn-danger');
+                document.querySelector('.follow_button').classList.add('follow');
+                document.querySelector('.follow_button').classList.remove('unfollow');
                 document.querySelector('.follow_button').innerHTML = "Follow"; 
 
             }
