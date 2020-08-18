@@ -11,11 +11,11 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'pages/base.css' %}">
-    <link rel="shortcut icon" href="{% static 'favicon/favicon.ico' type='image/x-icon' %}">
+    
 
     {% block extraStyle %}
     {% endblock extraStyle %}
-
+    <link rel="icon" href="{% static 'img/tweetme.ico' type='image/x-icon' %}">
     <title>{% block title %}{% endblock title %}</title>
   </head>
   <body>

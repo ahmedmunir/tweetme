@@ -24,10 +24,20 @@ from users import views as users_views
 
 from tweets.views import home_view
 
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', home_view, name="home"),
+
+    path('favicon.ico/',
+    RedirectView.as_view( # the redirecting function
+        url=staticfiles_storage.url('img/favicon.ico'), # converts the static directory + our favicon into a URL
+    ),
+    name="favicon" # name of our view
+    ),
 
     # Tweets urls
     path('tweets/', include('tweets.urls')),
