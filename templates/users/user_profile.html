@@ -15,52 +15,59 @@
 {% block content %}
     <div class='profile-container container p-4'>
         <div class='row align-items-center'>
-            <div class='image_container col-sm-12 col-lg-4'>
+            <div class='image_container'>
                 <img class='user_image' src="{{ selected_user.image.url }}">
             </div>
-            <div class= 'user_info col-sm-12 col-lg-8'>
-                <p class='mb-2'><span class='user-info'>Email: </span>{{selected_user.email}}
-                    {% if request.user.is_authenticated %}
-                        {% if selected_user != request.user %}
-                            {% if request.user in selected_user.followed_by.all %}
-                                <button class='btn btn-danger follow_button ml-4'>Unfollow</button>
-                            {% else %}
-                                <button class='btn btn-primary follow_button ml-4'>Follow</button>
+            <div class= 'user_info'>
+                <div class='username_follow_button'>
+                    <p class='user_username user-info username_container' data-username="{{selected_user.username}}"><span class='user_full_name'>{{selected_user.first_name}} {{selected_user.last_name}}</span> @{{selected_user.username}}</p>
+                    <div class='follow_container'>
+                        {% if request.user.is_authenticated %}
+                            {% if selected_user != request.user %}
+                                {% if request.user in selected_user.followed_by.all %}
+                                    <button class='btn follow_button unfollow'>Unfollow</button>
+                                {% else %}
+                                    <button class='btn follow_button follow'>Follow</button>
+                                {% endif %}
                             {% endif %}
-                        {% elif selected_user == request.user %}
-                            <a  href="{% url 'edit_profile' %}" class='btn btn-primary ml-4'>Edit Profile</a>
                         {% endif %}
-                    {% endif %}
-                </p>
-                <p class='mb-2 user_username ' data-username="{{selected_user.username}}"><span class='user-info'>Username:</span> {{selected_user.username}}</p>
-                <p class='mb-2'><span class='user-info'>Gender:</span> 
+                    </div>
+                </div> 
+                <!-- <p class='user_username user-info' data-username="{{selected_user.username}}"><span class='user_full_name'>{{selected_user.first_name}} {{selected_user.last_name}}</span> @{{selected_user.username}}</p> -->
+                <span class='user_username user-info'>
+                    <a class='user_follow_count' href="{% url 'user-followed_by' selected_user.username %}">
+                        <span class='user-info'>Followers: </span><span class='followers'>{{ selected_user.followed_by.count }}</span>
+                    </a>
+                </span>
+                <span class='user_username user-info ml-4'>
+                    <a class='user_follow_count' href="{% url 'user-following' selected_user.username %}">
+                        <span class='user-info'>Following: </span><span class='following'>{{ selected_user.following.count }}</span>
+                    </a>
+                </span>
+                <p class='user_username user-info'> 
                     {% if selected_user.gender == 1 %}
                         Male
                     {% elif selected_user.gender == 2 %}
                         Female
                     {% endif %}
                 </p>
-                <p class='mb-1'><span class='user-info'>Full name:</span> {{selected_user.first_name}} {{selected_user.last_name}}</p>
             </div>
         </div>
         <div class='info-container mt-4'>
-            <div class='row'>
-                <p class='col-3 text_center'>
-                    <a class='user_follow_count' href="{% url 'user-followed_by' selected_user.username %}">
-                        <span class='user-info'>Followers: </span><span class='followers'>{{ selected_user.followed_by.count }}</span>
-                    </a>
-                </p>
-                <p class='col-3 text_center'>
-                    <a class='user_follow_count' href="{% url 'user-following' selected_user.username %}">
-                        <span class='user-info'>Following: </span><span class='following'>{{ selected_user.following.count }}</span>
-                    </a>
-                </p>
-                <p class='col-6 text_center'><span class='user-info'>Date Joined: </span> <span class='date_join'>{{selected_user.date_joined}}</span></p>
+            <div class='bio-container'>
+               <div class="bio">
+                    <p class='joined user-info'>Joined <span class='date_join'>{{selected_user.date_joined}}</span></p>
+               </div> 
+               <div class='edit_button_container'>
+                    {% if selected_user == request.user %}
+                        <a  href="{% url 'edit_profile' %}" class='btn btn-primary edit_button'>Edit Profile</a>
+                    {% elif request.user in selected_user.following.all %}
+                        <p class='follows_you_text'>{{selected_user.first_name}} {{selected_user.last_name}} follows you</p>
+                    {% endif %}
+               </div>
             </div>
             {% if selected_user.bio %}
-            <div class='row'>
-                <p class='col-12 bio'>{{ selected_user.bio }}</p>
-            </div>
+                <p class='bio_text'>{{ selected_user.bio }}</p>
             {% endif %}
         </div>
     
