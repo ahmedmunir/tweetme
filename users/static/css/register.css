@@ -73,6 +73,7 @@ li {
 .error {
     font-size: 13px;
     color: red;
+    margin-left: 25%;
 }
 
 .login_redirect {
