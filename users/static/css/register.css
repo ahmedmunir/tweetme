@@ -74,6 +74,8 @@ li {
     font-size: 13px;
     color: red;
     margin-left: 25%;
+    margin-top: 5px;
+    font-style: italic;
 }
 
 .login_redirect {
