@@ -32,12 +32,12 @@ urlpatterns = [
 
     path('', home_view, name="home"),
 
-    # path('favicon.ico/',
-    # RedirectView.as_view( # the redirecting function
-    #     url=staticfiles_storage.url('img/favicon.ico'), # converts the static directory + our favicon into a URL
-    # ),
-    # name="favicon" # name of our view
-    # ),
+    path('favicon.ico/',
+    RedirectView.as_view( # the redirecting function
+        url=('/static/img/favicon.ico'), # converts the static directory + our favicon into a URL
+    ),
+    name="favicon" # name of our view
+    ),
 
     # Tweets urls
     path('tweets/', include('tweets.urls')),
