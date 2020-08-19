@@ -73,6 +73,10 @@
     
     </div>
     <div id="tweets" class='panel-body'></div>
+    <p class='wrong-alert'></p>
+    {% for message in messages %}
+        <p class='wrong-alert'>{{ message }}</p>
+    {% endfor %}
 {% endblock content %}
 
 {% block extraScript %}

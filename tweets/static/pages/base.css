@@ -71,6 +71,9 @@
     display: none;
 }
 
+.wrong-alert {
+    text-align: center;
+}
 
 /* Loading icon */
 .loading_icon {
