@@ -1,69 +1,80 @@
 body {
-    background-color: #15202B;
+    background-color: #202734;
     color: white;
 }
 
 .login_container {
-    width: 40%;
+    width: 465px;
     padding-top: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-bottom: 50px;
 }
 
 .image_container {
     text-align: center;
+    margin-left:56px;
     margin-bottom: 50px;
-    margin-top: 120px;
+    margin-top: 100px;
+}
+
+.form-login {
+    padding-top: 60px;
 }
 
 label[for='id_email'],
 label[for='id_password'] {
-    color: #5a6e8e;
-    font-size: 1.2rem;
-    width: 24%;
+
+    color: #62728d;
+    font-size: 1.15rem;
+    text-align: left;
     display: inline-block;
+    margin-bottom: 15px
+
 }
 
 input.form-control,
 input.form-control:focus {
-    background-color: #253341;
+    background-color: #3d4b61;
     color: white;
-    border: 1px solid #4F8AE3;
+    border: 1px solid #579aff;
     outline: none;
-}
-
-input.form-control {
     display: inline-block;
-    width: 75%;
-    margin-bottom: 30px;
+    font-size: 1.15rem;
 }
+input.form-control::placeholder {
+    color:#677a98;}
+
 
 .login_button,
 .login_button:hover {
     color: white;
-    border: rgba(88,150,255,1);
-    background: linear-gradient(90deg, rgba(88,150,255,1) 0%, rgba(142,7,255,1) 100%);
-    width: 100px;
-    display: block;
-    margin-left: auto;
-    font-size: 1.2rem;
+    padding-top:3px;
+    padding-bottom:5px;
+    border: 1px solid #579aff;
+    background: linear-gradient(135deg, rgba(88, 150, 255, 1) 0%, rgba(142, 7, 255, 1) 100%);
+    width: 117px;
+    display: inline-block;
+    float: right;
+    font-size: 1.15rem;
 }
 
 .register_redirect {
-    width: 75%;
+    width: 70%;
     margin-left: auto;
-    margin-top: 50px;
-    font-size: 1.2rem;
-    color: #5a6e8e;
+    margin-top: 60px;
+    font-size: 1.15rem;
+    color: #62728d;
 }
 
 .forget_password,
 .forget_password:hover {
-    color: #5a6e8e;
+    color: #62728d;
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .register_link,
 .register_link:hover {
-    color:#4F8AE3;
+    color: #4F8AE3;
 }
