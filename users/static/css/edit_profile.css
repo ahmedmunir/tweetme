@@ -37,8 +37,8 @@
 }
 
 .form-container {
-    margin : 40px auto;
-    width: 80%;
+    margin : 40px 66px;
+    width: 528px;
 }
 label{        
     color: #62728d;
@@ -68,6 +68,10 @@ height:180px;}
 input[type=checkbox],
 label[for=image-clear_id]{
     display: none
+}
+.buttons_container{
+    text-align:center;
+    margin:30px;
 }
 .confirm_button,
 .confirm_button:hover {
