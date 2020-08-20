@@ -247,6 +247,7 @@ body {
 
 .retweet_form,
 .edit_form {
+    border: 1px solid #5a6e8e;
     width: 660px;
     position: fixed; 
     top: 20%; 

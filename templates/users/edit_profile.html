@@ -15,13 +15,16 @@
 {% endblock extraStyle %}
 
 {% block content %}
-    <div class='image-container'>
+<div class='row justify-content-md-center d-flex flex-nowrap image-container'>
+        <div class='col-md-auto align-self-center'>
         <img src="{{ user.image.url }}" class='user-image'>
-
+        </div>
         {% if user.bio %}
+        <div class='col-md-auto bio_text'>
             <p class='mt-3'>{{ user.bio }}</p>
+        </div>
         {% endif %}
-    </div>
+</div>
     <div class='form-container'>
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}" role="alert">
@@ -31,8 +34,10 @@
         <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ u_form|crispy }}
-            <button type="submit" class="btn btn-primary mr-2">Update</button>
-            <a class='btn btn-primary' href="{% url 'password_change' %}">Change password</a>
+            <div class='buttons_container'>
+            <button type="submit" class="btn confirm_button">Update</button>
+            <a class='btn confirm_button' href="{% url 'password_change' %}">Change password</a>
+            </div>
         </form>
     </div>
 {% endblock content %}
