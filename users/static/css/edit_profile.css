@@ -1,16 +1,31 @@
+
 .image-container {
     text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 40px;
-    padding-top: 20px;
-    border-bottom: 1px solid gray;
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    margin-left:0px;
+    border-bottom: 1px solid #5a6e8e;
+    width:100%;
 }
 
 .user-image {
+    display:inline-block;
     border-radius: 50%;
-    width: 250px;
-    height: 250px;
     object-fit: cover;
+    width: 85px;
+    height: 85px;
+    margin-left: 10px;
+    margin-right: 15px;
+}
+.bio_text{
+    display:inline-block;
+    text-align: left;
+    margin-right:15px;
+    font-size: 1.2rem;
+    font-style: italic;
+    color:#687a96;
+    width:380px;
 }
 
 /* Styling Form */
@@ -26,21 +41,44 @@
     margin : 40px auto;
     width: 80%;
 }
-
+label{        
+    color: #62728d;
+    font-size: 1.15rem;
+    text-align: left;
+    display: inline-block;
+    width: 120px;}
 input.form-control,
-#id_gender,
-textarea.form-control {
-    background-color: #253341;
-    color: white;
-}
-
 input.form-control:focus,
+#id_gender,
+textarea.form-control,
 textarea.form-control:focus {
-    background-color: #253341;
+    background-color: #3d4b61;
     color: white;
+    border: 1px solid #579aff;
+    outline: none;
+    display: inline-block;
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+    width: 100%;
 }
+#id_gender{width:35%;}
+#id_bio{    resize: none;
+height:180px;}
+
 
 input[type=checkbox],
 label[for=image-clear_id]{
     display: none
+}
+.confirm_button,
+.confirm_button:hover {
+    color: white;
+    padding-top:3px;
+    padding-bottom:5px;
+    border: 1px solid #579aff;
+    background: linear-gradient(135deg, rgba(88, 150, 255, 1) 0%, rgba(142, 7, 255, 1) 100%);
+    width: auto;
+    display: inline-block;
+    font-size: 1.15rem;
+    margin:8px;
 }
