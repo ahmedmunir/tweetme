@@ -55,7 +55,6 @@ input.form-control::placeholder {
     background: linear-gradient(135deg, rgba(88, 150, 255, 1) 0%, rgba(142, 7, 255, 1) 100%);
     width: 117px;
     display: inline-block;
-    float: right;
     font-size: 1.15rem;
 }
 
@@ -76,5 +75,5 @@ input.form-control::placeholder {
 
 .register_link,
 .register_link:hover {
-    color: #4F8AE3;
+    color: #579aff;
 }

@@ -1,63 +1,80 @@
 /* Styling navigation bar */
+
 .nav_links {
     position: fixed;
-    padding-left: 30px;
+    padding-left: 55px;
     padding-top: 50px;
     padding-right: 20px;
-    width: 300px;
 }
 
 .nav_tweets {
-    margin-left: 300px;
+    margin-left: 400px;
+    width:660px
 }
 
 
 /* Styling search */
 .search_box {
-    margin-bottom: 40px;
+    margin-bottom: 64px;
     margin-top: 20px;
-    margin-right: 10px;
     display:flex;
     flex-direction:row;
+
 }
 
-.search_input_tag {
-    background-color: #3D4B61;
-    border: 1px solid #5084d3;
-    border-top-left-radius:4px;
-    border-bottom-left-radius: 4px;
-    font-style: italic;
+.search_input_tag,
+.search_input_tag:focus {
+    background-color: #3d4b61;
     outline: none;
+    border: 1px solid #579aff;
+    font-size: 1.15rem;
     color: white;
-    flex-grow:2;
-    padding: 8px;
+    padding: 5px;
+    padding-left:10px;
+    padding-right:10px;
+    border-top-left-radius:5px;
+    border-bottom-left-radius:5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    border-right:none;
+    width:235px;
 }
+.search_input_tag::placeholder {
+    color:#677a98;
+    font-style: italic;
+    font-size: 1.15rem
+}
+
 
 .search {
-    border: 1px solid #5084d3;
-    border-left: none;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
     color: white;
-    background: linear-gradient(90deg, rgba(88,150,255,1) 0%, rgba(142,7,255,1) 100%);
+    padding-top:3px;
+    padding-bottom:5px;
+    border: 1px solid #579aff;
+    background: linear-gradient(135deg, rgba(88, 150, 255, 1) 0%, rgba(142, 7, 255, 1) 100%);
+    display: inline-block;
+    font-size: 1.15rem;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width:38px;
 }
 
-.link_redirect {
+.link_redirect,
+.link_redirect:hover {
     display: block;
     margin-bottom: 25px;
-    color: white;
+    color: #62738e;
     margin-left: 20px;
-}
-
-.link_redirect img {
-    width: 150px;
-}
-
-.link_redirect:hover {
     text-decoration: none;
-    cursor: pointer;
-    color: rgba(88,150,255,1);
 }
+.link_redirect:hover {
+    color: #8aa1c5;}
+.link_redirect img {
+    text-align: center;
+    margin-top: 60px;
+    margin-bottom: 15px;
+}
+
 
 /* Styling backdrop window */
 .backdrop_window {
@@ -71,9 +88,6 @@
     display: none;
 }
 
-.wrong-alert {
-    text-align: center;
-}
 
 /* Loading icon */
 .loading_icon {

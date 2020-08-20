@@ -17,6 +17,10 @@
 
 {% block content %}
     {% if user.is_authenticated %}
+    <div class='tweet_create_container'>
+        <img class='user_image' src="{{ request.user.image.url }}">
+        <span class='user_full_name'>{{request.user.first_name}} {{request.user.last_name}}</span>
+    </div> 
         <form method="POST" action="{% url 'tweet-create' %}" class='tweet_create_container'>
             {% csrf_token %}
             <textarea name="content" id="id_content" placeholder="What is happening?"></textarea>
