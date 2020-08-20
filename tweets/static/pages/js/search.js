@@ -193,28 +193,28 @@ const edit_event_listener = (tweet, e_event_handler) => {
         // Tweet username
         let tweet_username = document.createElement('small');
         tweet_username.classList.add('tweet_username');
-        tweet_username.innerHTML = `${tweet['user_first_name']} ${tweet['user_last_name']}`;
+        tweet_username.innerHTML = `${tweet['retweeted_tweet']['user_first_name']} ${tweet['retweeted_tweet']['user_last_name']}`;
 
         // Tweet user unique name
         let tweet_unique_user = document.createElement('small');
         tweet_unique_user.classList.add('tweet_user_unique');
-        tweet_unique_user.innerHTML = ` @${tweet['user_username']}`;
+        tweet_unique_user.innerHTML = ` @${tweet['retweeted_tweet']['user_username']}`;
 
         // Tweet Date
         let tweet_date = document.createElement('small');
         tweet_date.classList.add('tweet_date');
-        tweet_date.innerHTML = tweet['date_posted'];
+        tweet_date.innerHTML = tweet['retweeted_tweet']['date_posted'];
 
         // Tweet Text
         let tweet_text = document.createElement('p');
         tweet_text.classList.add('tweet_text');
-        tweet_text.innerHTML = tweet['content'];
+        tweet_text.innerHTML = tweet['retweeted_tweet']['content'];
 
         // User image container
         let user_image = document.createElement('div');
         user_image.classList.add('col-md-1');
         user_image.classList.add('image_container');
-        let image_url = tweet['user_image'];
+        let image_url = tweet['retweeted_tweet']['user_image'];
         let image = document.createElement('img');
         image.classList.add('user_tweet_image');
         image.setAttribute('src', image_url);
