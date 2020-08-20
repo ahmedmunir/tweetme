@@ -26,6 +26,7 @@ window.addEventListener('scroll', e => {
     }
 })
 
+
 /*
 ==============
     Functions
@@ -82,7 +83,7 @@ const react_tweet = (react_button) => {
         })
         .then(response => {
             if(response.redirected == true){
-                alert("You need to login first to be able to react to TweeTs!");
+                alert("You need to login first to be able to react to Tweets!");
             } else {
                 return response.json();
             }
@@ -91,12 +92,12 @@ const react_tweet = (react_button) => {
 
             // If tweet deleted before we react
 
-            if(data != undefined) {
+            if (data != undefined) {
                 if(data['message']) {
                     document.querySelector('.wrong-alert').innerHTML = data['message'];
                 } else {
                     
-                    targeted_element = e.target.closest('.text_username_container');
+                    targeted_element = e.target.closest('.text_buttons_container');
                     len_of_elements = targeted_element.childNodes.length
 
                     // Because we don't know if it is a retweet or normal Tweet
@@ -105,29 +106,29 @@ const react_tweet = (react_button) => {
                     if(targeted_element.innerHTML.includes('retweet_container')){
 
                         // Change link button state
-                        targeted_element.childNodes[5].classList[data['like']]('react_color');
+                        targeted_element.childNodes[2].classList[data['like']]('react_color');
                         
                         // change number of likes
-                        targeted_element.childNodes[6].innerHTML = data['likes'];
+                        targeted_element.childNodes[3].innerHTML = data['likes'];
                         
                         // change dislike button state
-                        targeted_element.childNodes[7].classList[data['dislike']]('react_color');
+                        targeted_element.childNodes[4].classList[data['dislike']]('react_color');
                         
                         // change number of dislikes
-                        targeted_element.childNodes[8].innerHTML = data['dislikes'];
+                        targeted_element.childNodes[5].innerHTML = data['dislikes'];
                     } else {
 
                         // Change link button state
-                        targeted_element.childNodes[4].classList[data['like']]('react_color');
+                        targeted_element.childNodes[1].classList[data['like']]('react_color');
                         
                         // change number of likes
-                        targeted_element.childNodes[5].innerHTML = data['likes'];
+                        targeted_element.childNodes[2].innerHTML = data['likes'];
                         
                         // change dislike button state
-                        targeted_element.childNodes[6].classList[data['dislike']]('react_color');
+                        targeted_element.childNodes[3].classList[data['dislike']]('react_color');
                         
                         // change number of dislikes
-                        targeted_element.childNodes[7].innerHTML = data['dislikes'];
+                        targeted_element.childNodes[4].innerHTML = data['dislikes'];
 
                     }
                 }
@@ -173,11 +174,11 @@ const edit_event_listener = (tweet, e_event_handler) => {
 
     // Display Edit tweet form
     let edit_text = document.createElement('textarea');
+    edit_text.classList.add('edit_text_textarea');
     edit_text.setAttribute('name', 'content');
     edit_text.setAttribute('id', 'id_content');
     edit_text.setAttribute('placeholder', 'Add a comment');
-    edit_text.classList.add('edit_text_textarea');
-    edit_text.innerHTML = e_event_handler.target.closest('.text_username_container').childNodes[3].innerHTML;
+    edit_text.innerHTML = e_event_handler.target.closest('.text_buttons_container').childNodes[0].innerHTML;
 
     // Display retweet content if it is edit for retweet
     if(tweet['retweet']){
@@ -186,9 +187,8 @@ const edit_event_listener = (tweet, e_event_handler) => {
         tweet_Element.classList.add('row');
         tweet_Element.classList.add('tweet_container');
         
-        let tweet_text_username = document.createElement('div');
-        tweet_text_username.classList.add('col-md-11')
-        tweet_text_username.classList.add('text_username_container');
+        let tweet_text_buttons = document.createElement('div');
+        tweet_text_buttons.classList.add('text_buttons_container');
 
         // Tweet username
         let tweet_username = document.createElement('small');
@@ -196,9 +196,15 @@ const edit_event_listener = (tweet, e_event_handler) => {
         tweet_username.innerHTML = `${tweet['retweeted_tweet']['user_first_name']} ${tweet['retweeted_tweet']['user_last_name']}`;
 
         // Tweet user unique name
-        let tweet_unique_user = document.createElement('small');
+        let tweet_unique_user = document.createElement('div');
         tweet_unique_user.classList.add('tweet_user_unique');
         tweet_unique_user.innerHTML = ` @${tweet['retweeted_tweet']['user_username']}`;
+        
+        let tweet_header = document.createElement('div');
+        tweet_header.classList.add('row');
+        
+        let tweet_name_date = document.createElement('div');
+        tweet_name_date.classList.add('rtname_date_container');   
 
         // Tweet Date
         let tweet_date = document.createElement('small');
@@ -207,12 +213,12 @@ const edit_event_listener = (tweet, e_event_handler) => {
 
         // Tweet Text
         let tweet_text = document.createElement('p');
-        tweet_text.classList.add('tweet_text');
+        tweet_text.classList.add('retweet_text');
         tweet_text.innerHTML = tweet['retweeted_tweet']['content'];
 
         // User image container
         let user_image = document.createElement('div');
-        user_image.classList.add('col-md-1');
+        user_image.classList.add('col-md-auto');
         user_image.classList.add('image_container');
         let image_url = tweet['retweeted_tweet']['user_image'];
         let image = document.createElement('img');
@@ -220,12 +226,13 @@ const edit_event_listener = (tweet, e_event_handler) => {
         image.setAttribute('src', image_url);
         user_image.insertAdjacentElement('afterbegin', image);
 
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_username);
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_unique_user);
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_date);
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_text);
-        tweet_Element.insertAdjacentElement('beforeend', user_image);
-        tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
+        tweet_name_date.insertAdjacentElement('beforeend', tweet_username);
+        tweet_name_date.insertAdjacentElement('beforeend', tweet_date);
+        tweet_name_date.insertAdjacentElement('beforeend', tweet_unique_user);
+        tweet_header.insertAdjacentElement('beforeend', user_image);
+        tweet_header.insertAdjacentElement('beforeend', tweet_name_date);
+        tweet_Element.insertAdjacentElement('beforeend', tweet_header);
+        tweet_Element.insertAdjacentElement('beforeend', tweet_text);
     }
 
 
@@ -277,7 +284,6 @@ const edit_event_listener = (tweet, e_event_handler) => {
     // Cancel Edit Button & Event Listener
     let cancel_edit_button = document.createElement('button');
     cancel_edit_button.classList.add('btn');
-    cancel_edit_button.classList.add('btn-danger');
     cancel_edit_button.classList.add('edit_cancel');
     cancel_edit_button.innerHTML = 'Cancel';
     // Add Event listener for cancel Button
@@ -346,9 +352,8 @@ const retweet_function = (tweet) => {
         tweet_Element.setAttribute('value', tweet['id']);
 
         // Tweet text & username container
-        let tweet_text_username = document.createElement('div');
-        tweet_text_username.classList.add('col-md-11')
-        tweet_text_username.classList.add('text_username_container');
+        let tweet_text_buttons = document.createElement('div');
+        tweet_text_buttons.classList.add('text_buttons_container');
 
         // Tweet username
         let tweet_username = document.createElement('small');
@@ -356,10 +361,15 @@ const retweet_function = (tweet) => {
         tweet_username.innerHTML = `${tweet['user_first_name']} ${tweet['user_last_name']}`;
 
         // Tweet user unique name
-        let tweet_unique_user = document.createElement('small');
+        let tweet_unique_user = document.createElement('div');
         tweet_unique_user.classList.add('tweet_user_unique');
         tweet_unique_user.innerHTML = ` @${tweet['user_username']}`;
 
+        let tweet_header = document.createElement('div');
+        tweet_header.classList.add('row');
+        
+        let tweet_name_date = document.createElement('div');
+        tweet_name_date.classList.add('rtname_date_container');    
         // Tweet Date
         let tweet_date = document.createElement('small');
         tweet_date.classList.add('tweet_date');
@@ -367,12 +377,12 @@ const retweet_function = (tweet) => {
 
         // Tweet Text
         let tweet_text = document.createElement('p');
-        tweet_text.classList.add('tweet_text');
+        tweet_text.classList.add('retweet_text');
         tweet_text.innerHTML = tweet['content'];
 
         // User image container
         let user_image = document.createElement('div');
-        user_image.classList.add('col-md-1');
+        user_image.classList.add('col-md-auto');
         user_image.classList.add('image_container');
         let image_url = tweet['user_image'];
         let image = document.createElement('img');
@@ -402,12 +412,13 @@ const retweet_function = (tweet) => {
             document.querySelector('.backdrop_window').style.display = 'none';
         })
 
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_username);
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_unique_user);
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_date);
-        tweet_text_username.insertAdjacentElement('beforeend', tweet_text);
-        tweet_Element.insertAdjacentElement('beforeend', user_image);
-        tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
+        tweet_name_date.insertAdjacentElement('beforeend', tweet_username);
+        tweet_name_date.insertAdjacentElement('beforeend', tweet_date);
+        tweet_name_date.insertAdjacentElement('beforeend', tweet_unique_user);
+        tweet_header.insertAdjacentElement('beforeend', user_image);
+        tweet_header.insertAdjacentElement('beforeend', tweet_name_date);
+        tweet_Element.insertAdjacentElement('beforeend', tweet_header);
+        tweet_Element.insertAdjacentElement('beforeend', tweet_text);
         retweet_form.insertAdjacentElement('beforeend', csrf_input);
         retweet_form.insertAdjacentElement('beforeend', retweet_comment);
         retweet_form.insertAdjacentElement('beforeend', tweet_Element);
@@ -429,11 +440,10 @@ const fetchData = () => {
 
     let params = new URLSearchParams({
         'start' : start,
-        'search': document.querySelector('.search_input_tag').value
     })
 
     // Fetch data from server
-    let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/list_search_tweets/?${params}`
+    let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/?${params}`
     fetch(url, {
         method: "GET",
         headers: {
@@ -476,15 +486,21 @@ const add_tweet_to_dom = (position, tweet) => {
 
     // Tweet Element Container
     let tweet_Element = document.createElement('div');
-    tweet_Element.classList.add('row');
     tweet_Element.classList.add('tweet_container');
     tweet_Element.setAttribute('data-id', tweet['id']);
     
 
     // Tweet text & username container
-    let tweet_text_username = document.createElement('div');
-    tweet_text_username.classList.add('col-md-11')
-    tweet_text_username.classList.add('text_username_container');
+    let tweet_text_buttons = document.createElement('div');
+    tweet_text_buttons.classList.add('text_buttons_container');
+
+
+    let tweet_header = document.createElement('div');
+    tweet_header.classList.add('row');
+    
+    let tweet_name_date = document.createElement('div');
+    tweet_name_date.classList.add('name_date_container');
+    
 
     // Tweet username
     let tweet_username = document.createElement('a');
@@ -493,7 +509,7 @@ const add_tweet_to_dom = (position, tweet) => {
     tweet_username.innerHTML = `${tweet['user_first_name']} ${tweet['user_last_name']}`;
 
     // Tweet user unique name
-    let tweet_unique_user = document.createElement('small');
+    let tweet_unique_user = document.createElement('div');
     tweet_unique_user.classList.add('tweet_user_unique');
     tweet_unique_user.innerHTML = ` @${tweet['user_username']}`;
 
@@ -533,6 +549,9 @@ const add_tweet_to_dom = (position, tweet) => {
     dislikes_number.classList.add('dislikes_number');
     dislikes_number.innerHTML = tweet['dislikes'];
 
+    let delete_edit = document.createElement('div');
+    delete_edit.classList.add('delete_edit_container');
+
     // Delete button
     if(tweet['tweet-owner'] === true) {
 
@@ -568,8 +587,7 @@ const add_tweet_to_dom = (position, tweet) => {
             retweet_container.setAttribute('data-id', tweet['retweeted_tweet']['id']);
 
             let retweet_Element = document.createElement('div');
-            retweet_Element.classList.add('col-7');
-            retweet_Element.classList.add('retext_username_container');
+            retweet_Element.classList.add('retext_container');
             
 
             // Retweet username
@@ -579,9 +597,15 @@ const add_tweet_to_dom = (position, tweet) => {
             retweet_username.innerHTML = `${tweet['retweeted_tweet']['user_first_name']} ${tweet['retweeted_tweet']['user_last_name']}`;
 
             // Retweet user unique name
-            let retweet_unique_user = document.createElement('small');
+            let retweet_unique_user = document.createElement('div');
             retweet_unique_user.classList.add('retweet_user_unique');
             retweet_unique_user.innerHTML = ` @${tweet['retweeted_tweet']['user_username']}`;
+
+            let retweet_header = document.createElement('div');
+            retweet_header.classList.add('row');
+            
+            let retweet_name_date = document.createElement('div');
+            retweet_name_date.classList.add('rtname_date_container');        
 
             // Retweet Date
             let retweet_date = document.createElement('small');
@@ -596,7 +620,7 @@ const add_tweet_to_dom = (position, tweet) => {
             // Retweet image
             // User image container
             let rt_user_image = document.createElement('div');
-            rt_user_image.classList.add('col-1');
+            rt_user_image.classList.add('col-md-auto');
             rt_user_image.classList.add('image_container');
             let rt_image_url = tweet['retweeted_tweet']['user_image'];
             let rt_image = document.createElement('img');
@@ -605,11 +629,14 @@ const add_tweet_to_dom = (position, tweet) => {
             rt_user_image.insertAdjacentElement('afterbegin', rt_image);
 
             //append data to retweet element
-            retweet_Element.insertAdjacentElement('beforeend', retweet_username);
-            retweet_Element.insertAdjacentElement('beforeend', retweet_unique_user);
-            retweet_Element.insertAdjacentElement('beforeend', retweet_date);
-            retweet_Element.insertAdjacentElement('beforeend', retweet_text);
-            retweet_container.insertAdjacentElement('beforeend', rt_user_image);
+            retweet_Element.insertAdjacentElement('beforeend', retweet_header);
+            retweet_header.insertAdjacentElement('beforeend', rt_user_image);
+            retweet_header.insertAdjacentElement('beforeend', retweet_name_date);
+            retweet_name_date.insertAdjacentElement('beforeend', retweet_username);
+            retweet_name_date.insertAdjacentElement('beforeend', retweet_date);
+            retweet_name_date.insertAdjacentElement('beforeend', retweet_unique_user);
+
+            retweet_header.insertAdjacentElement('beforeend', retweet_text);
             retweet_container.insertAdjacentElement('beforeend', retweet_Element);
         } else {
 
@@ -639,7 +666,7 @@ const add_tweet_to_dom = (position, tweet) => {
 
     // User image container
     let user_image = document.createElement('div');
-    user_image.classList.add('col-md-1');
+    user_image.classList.add('col-md-auto');
     user_image.classList.add('image_container');
     let image_url = tweet['user_image'];
     let image = document.createElement('img');
@@ -648,34 +675,39 @@ const add_tweet_to_dom = (position, tweet) => {
     user_image.insertAdjacentElement('afterbegin', image);
 
     // Insert All elements inside Div that will contain them
-    tweet_text_username.insertAdjacentElement('beforeend', tweet_username);
-    tweet_text_username.insertAdjacentElement('beforeend', tweet_unique_user);
-    tweet_text_username.insertAdjacentElement('beforeend', tweet_date);
-    tweet_text_username.insertAdjacentElement('beforeend', tweet_text);
+
+    tweet_header.insertAdjacentElement('beforeend', user_image);
+    tweet_header.insertAdjacentElement('beforeend', tweet_name_date);
+    tweet_name_date.insertAdjacentElement('beforeend', tweet_username);
+    tweet_name_date.insertAdjacentElement('beforeend', tweet_date);
+    tweet_name_date.insertAdjacentElement('beforeend', tweet_unique_user);
+
+    tweet_text_buttons.insertAdjacentElement('beforeend', tweet_text);
 
     // add retweet container if exists
     if(retweet_container) {
-        tweet_text_username.insertAdjacentElement('beforeend', retweet_container);
+        tweet_text_buttons.insertAdjacentElement('beforeend', retweet_container);
     }
     
-    tweet_text_username.insertAdjacentElement('beforeend', like_button);
-    tweet_text_username.insertAdjacentElement('beforeend', likes_number);
-    tweet_text_username.insertAdjacentElement('beforeend', dislike_button);
-    tweet_text_username.insertAdjacentElement('beforeend', dislikes_number);
+    tweet_text_buttons.insertAdjacentElement('beforeend', like_button);
+    tweet_text_buttons.insertAdjacentElement('beforeend', likes_number);
+    tweet_text_buttons.insertAdjacentElement('beforeend', dislike_button);
+    tweet_text_buttons.insertAdjacentElement('beforeend', dislikes_number);
 
     // Display Delete button if exists
-    if(tweet['tweet-owner'] === true){
-        tweet_text_username.insertAdjacentElement('beforeend', delete_button);
-        tweet_text_username.insertAdjacentElement('beforeend', edit_button);
-    }
+
     
     // add retweet button if there is not retweet
     if(!retweet_container) {
-        tweet_text_username.insertAdjacentElement('beforeend', retweet_button);
+        tweet_text_buttons.insertAdjacentElement('beforeend', retweet_button);
     }
-
-    tweet_Element.insertAdjacentElement('beforeend', user_image);
-    tweet_Element.insertAdjacentElement('beforeend', tweet_text_username);
+    if(tweet['tweet-owner'] === true){
+        tweet_text_buttons.insertAdjacentElement('beforeend',delete_edit)
+        delete_edit.insertAdjacentElement('beforeend', delete_button);
+        delete_edit.insertAdjacentElement('beforeend', edit_button);
+    }
+    tweet_Element.insertAdjacentElement('beforeend', tweet_header);
+    tweet_Element.insertAdjacentElement('beforeend', tweet_text_buttons);
     tweetsElement.insertAdjacentElement(position, tweet_Element);
 
 }
