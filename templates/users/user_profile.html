@@ -13,70 +13,79 @@
 {% endblock extraStyle %}
 
 {% block content %}
-    <div class='profile-container container p-4'>
-        <div class='row align-items-center'>
-            <div class='image_container'>
+    <div class='containter p-4 profile-container'>
+        <div class='row justify-content-between'>
+            <dev class='col-sm-auto d-flex align-middle'>
                 <img class='user_image' src="{{ selected_user.image.url }}">
-            </div>
             <div class= 'user_info'>
                 <div class='username_follow_button'>
-                    <p class='user_username user-info username_container' data-username="{{selected_user.username}}"><span class='user_full_name'>{{selected_user.first_name}} {{selected_user.last_name}}</span> @{{selected_user.username}}</p>
-                    <div class='follow_container'>
-                        {% if request.user.is_authenticated %}
-                            {% if selected_user != request.user %}
-                                {% if request.user in selected_user.followed_by.all %}
-                                    <button class='btn follow_button unfollow'>Unfollow</button>
-                                {% else %}
-                                    <button class='btn follow_button follow'>Follow</button>
-                                {% endif %}
-                            {% endif %}
-                        {% endif %}
-                    </div>
+                    <p class='user_username  username_container' data-username="{{selected_user.username}}"><span class='user_full_name'>{{selected_user.first_name}} {{selected_user.last_name}}</span> @{{selected_user.username}}</p>
+ 
                 </div> 
+
                 <!-- <p class='user_username user-info' data-username="{{selected_user.username}}"><span class='user_full_name'>{{selected_user.first_name}} {{selected_user.last_name}}</span> @{{selected_user.username}}</p> -->
-                <span class='user_username user-info'>
+                <span class='user_username '>
                     <a class='user_follow_count' href="{% url 'user-followed_by' selected_user.username %}">
-                        <span class='user-info'>Followers: </span><span class='followers'>{{ selected_user.followed_by.count }}</span>
+                        <span>Followers: </span><span class='followers'>{{ selected_user.followed_by.count }}</span>
                     </a>
                 </span>
-                <span class='user_username user-info ml-4'>
+                <span class='user_username  ml-4'>
                     <a class='user_follow_count' href="{% url 'user-following' selected_user.username %}">
-                        <span class='user-info'>Following: </span><span class='following'>{{ selected_user.following.count }}</span>
+                        <span >Following: </span><span class='following'>{{ selected_user.following.count }}</span>
                     </a>
                 </span>
-                <p class='user_username user-info'> 
-                    {% if selected_user.gender == 1 %}
-                        Male
-                    {% elif selected_user.gender == 2 %}
-                        Female
+                        </div>
+                    </dev>            
+                    
+            <div class='d-flex align-items-start '>
+                {% if request.user.is_authenticated %}
+                    {% if selected_user != request.user %}
+                        {% if request.user in selected_user.followed_by.all %}
+                            <button class='btn follow_button unfollow'>Unfollow</button>
+                        {% else %}
+                            <button class='btn follow_button follow'>Follow</button>
+                        {% endif %}
                     {% endif %}
-                </p>
+                {% endif %}
             </div>
-        </div>
-        <div class='info-container mt-4'>
-            <div class='bio-container'>
-               <div class="bio">
-                    <p class='joined user-info'>Joined <span class='date_join'>{{selected_user.date_joined}}</span></p>
-               </div> 
-               <div class='edit_button_container'>
-                    {% if selected_user == request.user %}
-                        <a  href="{% url 'edit_profile' %}" class='btn btn-primary edit_button'>Edit Profile</a>
-                    {% elif request.user in selected_user.following.all %}
-                        <p class='follows_you_text'>{{selected_user.first_name}} {{selected_user.last_name}} follows you</p>
-                    {% endif %}
-               </div>
-            </div>
+
+    </div>
+        <div class='row justify-content-between'>
+            <div class='bio'>
+            <div class='col-sm-auto'>
+
+                    <p class='joined '>Joined <span class='date_join'>{{selected_user.date_joined}}</span></p>
+                
+                    <p class='joined'> 
+                        {% if selected_user.gender == 1 %}
+                            Male
+                        {% elif selected_user.gender == 2 %}
+                            Female
+                        {% endif %}
+                    </p>
+
             {% if selected_user.bio %}
                 <p class='bio_text'>{{ selected_user.bio }}</p>
             {% endif %}
         </div>
+
+
+    </div> 
+    <div class='d-flex align-items-end'>
+        {% if selected_user == request.user %}
+            <a  href="{% url 'edit_profile' %}" class='btn edit_button'>Edit Profile</a>
+        {% elif request.user in selected_user.following.all %}
+            <p class='follows_you_text'>{{selected_user.first_name}} {{selected_user.last_name}} follows you</p>
+        {% endif %}
+   </div>
+        </div>
     
     </div>
     <div id="tweets" class='panel-body'></div>
-    <p class='wrong-alert'></p>
-    {% for message in messages %}
-        <p class='wrong-alert'>{{ message }}</p>
-    {% endfor %}
+      <p class='wrong-alert'></p>
+        {% for message in messages %}
+            <p class='wrong-alert'>{{ message }}</p>
+        {% endfor %}
 {% endblock content %}
 
 {% block extraScript %}
