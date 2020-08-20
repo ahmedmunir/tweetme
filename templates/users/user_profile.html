@@ -14,7 +14,7 @@
 
 {% block content %}
     <div class='containter p-4 profile-container'>
-        <div class='row justify-content-between'>
+        <div class='row justify-content-between d-flex flex-nowrap'>
             <dev class='col-sm-auto d-flex align-middle'>
                 <img class='user_image' src="{{ selected_user.image.url }}">
             <div class= 'user_info'>
@@ -50,7 +50,7 @@
             </div>
 
     </div>
-        <div class='row justify-content-between'>
+        <div class='row justify-content-between d-flex flex-nowrap'>
             <div class='bio'>
             <div class='col-sm-auto'>
 
@@ -71,7 +71,7 @@
 
 
     </div> 
-    <div class='d-flex align-items-end'>
+    <div class='d-flex flex-no-wrap align-items-end'>
         {% if selected_user == request.user %}
             <a  href="{% url 'edit_profile' %}" class='btn edit_button'>Edit Profile</a>
         {% elif request.user in selected_user.following.all %}
