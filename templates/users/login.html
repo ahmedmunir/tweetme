@@ -1,52 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
 
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/login.css' %}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>TweeTME - Login</title>
-    </head>
-    <body>
-        <div class='container login_container'>
-            <div class='mb-5 image_container'>
-                <a class="d-inline-block" href="{% url 'home' %}">
-                    {% load static %}
-                    <img src="{% static 'img/tweetmelogo.png' %}">
-                  </a>
-            </div>
-            {% for message in messages %}
-                {% if message.tags == 'error' %}
-                    <div class='alert alert-danger'>{{ message }}</div>
-                {% else %}
-                    <div class='alert alert-success'>{{ message }}</div>
-                {% endif %}
-            {% endfor %}
-            <form method="POST" action="{% url 'login' %}">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="id_email">E-mail</label>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <title>TweetME - Login</title>
+</head>
+
+<body>
+    <div class='container login_container'>
+        <div class='mb-5 image_container'>
+            <a class="d-inline-block" href="{% url 'home' %}">
+                {% load static %}
+                <img src="{% static 'img/tweetmelogo_large.png' %}">
+            </a>
+        </div>
+        {% for message in messages %}
+        {% if message.tags == 'error' %}
+        <div class='alert alert-danger'>{{ message }}</div>
+        {% else %}
+        <div class='alert alert-success'>{{ message }}</div>
+        {% endif %}
+        {% endfor %}
+        <form class="form-login" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="id_email" class="col-sm-3 col-form-label">E-mail</label>
+                <div class="col-sm-9">
                     <input required type="text" name='email' maxlength="60" class="form-control" id="id_email" aria-describedby="emailHelp" placeholder="Enter email" autocomplete="email">
                 </div>
-                <div class="form-group">
-                    <label for="id_password">Password</label>
+            </div>
+            <div class="form-group row">
+                <label for="id_password" class="col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
                     <input autocomplete="current-password" type="password" class="form-control" id="id_password" required name='password' placeholder="Password">
                 </div>
-                <div class='form-group'>
+            </div>
+            <div class='form-group row'>
+                <div class="col-sm-12">
                     <button type="submit" class="btn login_button">Log in</button>
                 </div>
-                
-            </form>
-            <div class='register_redirect'>
-                <a class='forget_password' href="{% url 'password_reset' %}">Forget Password</a>
-                <p class='register_text'>Need An Account? <a class='register_link' href="{% url 'register' %}">Register</a></p>
             </div>
+
+        </form>
+        <div class='register_redirect'>
+            <a class='forget_password' href="{% url 'password_reset' %}">Forget Password</a>
+            <p class='register_text'>Need An Account? <a class='register_link' href="{% url 'register' %}">Register</a>
+            </p>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>
