@@ -15,28 +15,58 @@
 {% endblock extraStyle %}
 
 {% block content %}
+<form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
 <div class='row justify-content-md-center d-flex flex-nowrap image-container'>
         <div class='col-md-auto align-self-center'>
         <img src="{{ user.image.url }}" class='user-image'>
         </div>
-        {% if user.bio %}
-        <div class='col-md-auto bio_text'>
-            <p class='mt-3'>{{ user.bio }}</p>
+        <div class='col-md-auto image_change_text'>
+            <p>Change profile picture:</p>
+            <div id="div_id_image">
+                <input type="file" name="image" accept="image/*" id="id_image">
         </div>
-        {% endif %}
 </div>
-    <div class='form-container'>
+</div>
+    <div class='container form-container'>
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}" role="alert">
                 {{ message }}
             </div>
         {% endfor %}
-        <form method="POST" action="{% url 'edit_profile' %}" enctype="multipart/form-data">
+
             {% csrf_token %}
-            {{ u_form|crispy }}
+            <div class="form-group row" id="div_id_username">
+                <label for="id_username" class="edit_username col-sm-auto col-form-label">Username</label>
+                <input type="text" name="username" id="id_username" maxlength="10" class="form-control username_text" value="{{ u_form.username.value }}">
+            </div> 
+            <div class="form-group row" id="div_id_email">
+                <label for="id_email" class="edit_email col-sm-auto col-form-label">Email</label>
+                <input type="email" name="email" id="id_email" maxlength="60" class="form-control email_text" value="{{ u_form.email.value }}">
+            </div> 
+            <div class="form-group row" id="div_id_gender">
+                <label for="id_gender" class="edit_gender col-sm-auto col-form-label">Gender</label>
+                <select class="custom-select" name="gender" id="id_gender">
+                    <option value="Select a gender" selected>Select a gender</option>
+                    {% for value, text in u_form.gender.field.choices %}
+                        <option value="{{ value }}">{{ text }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group row" id="div_id_first_name">
+                <label for="id_first_name" class="edit_first_name col-sm-auto col-form-label">First name</label>
+                <input type="text" name="first_name" id="id_first_name" maxlength="10" class="form-control first_name_text" value="{{ u_form.first_name.value }}">
+            </div> 
+            <div class="form-group row" id="div_id_last_name">
+                <label for="id_last_name" class="edit_last_name col-sm-auto col-form-label">Last name</label>
+                <input type="text" name="last_name" id="id_last_name" maxlength="10" class="form-control last_name_text" value="{{ u_form.last_name.value }}">
+            </div>
+            <div  class="form-group row" id="div_id_bio">
+                <label for="id_bio" class="edit_bio col-sm-auto col-form-label">Bio</label>
+                <textarea name="bio" cols="40" rows="7" maxlength="250" class="form-control bio_edit" id="id_bio">{{ u_form.bio.value }}</textarea>
+           </div>
             <div class='buttons_container'>
-            <button type="submit" class="btn confirm_button">Update</button>
-            <a class='btn confirm_button' href="{% url 'password_change' %}">Change password</a>
+                <button type="submit" class="btn confirm_button">Update</button>
+                <a class='btn confirm_button' href="{% url 'password_change' %}">Change password</a>
             </div>
         </form>
     </div>
