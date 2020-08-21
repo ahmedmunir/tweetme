@@ -1,5 +1,10 @@
 /* Styling navigation bar */
 
+div.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 .nav_links {
     position: fixed;
     padding-left: 55px;
