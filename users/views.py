@@ -171,7 +171,7 @@ def user_profile(request, *args, **kwargs):
             
             # Delete old image first
             if 'profile_pics' in NewUser.objects.filter(id=request.user.id).first().image.url and request.FILES:
-                NewUser.objects.filter(username=request.user.username).first().image.delete(False)
+                NewUser.objects.filter(id=request.user.id).first().image.delete(False)
             
             u_form.save()
             messages.success(request, 'Your data updated successfully!')
