@@ -440,6 +440,7 @@ const fetchData = () => {
 
     let params = new URLSearchParams({
         'start' : start,
+        'search': document.querySelector('.search_input_tag').value
     })
 
     // Fetch data from server
