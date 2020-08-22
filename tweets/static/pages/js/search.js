@@ -444,7 +444,7 @@ const fetchData = () => {
     })
 
     // Fetch data from server
-    let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/?${params}`
+    let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/tweets/list_search_tweets/?${params}`
     fetch(url, {
         method: "GET",
         headers: {
