@@ -42,30 +42,30 @@ if(document.querySelector('.follow_button')){
                 
                 // If follow process succeded 
                 if(data['state'] == 'follow') {
-                    document.querySelector('.follow_button').classList.remove('follow');
-                    document.querySelector('.follow_button').classList.add('unfollow');
-                    document.querySelector('.follow_button').innerHTML = "Unfollow";
+                    follow_button.classList.remove('follow');
+                    follow_button.classList.add('unfollow');
+                    follow_button.innerHTML = "Unfollow";
                     
                     // Increase number of followers in case that the logged in user
                     // visiting the page of his following
                     if(document.querySelector('.edit_button')){
-                        document.querySelector('.followers').textContent =
-                        parseInt(document.querySelector('.followers').textContent) + 1;
+                        document.querySelector('.following').textContent =
+                        parseInt(document.querySelector('.following').textContent) + 1;
                     }
 
                 }
         
                 // If unfollow process succeded
                 else if(data['state'] == 'unfollow') {
-                    document.querySelector('.follow_button').classList.add('follow');
-                    document.querySelector('.follow_button').classList.remove('unfollow');
-                    document.querySelector('.follow_button').innerHTML = "Follow";
+                    follow_button.classList.add('follow');
+                    follow_button.classList.remove('unfollow');
+                    follow_button.innerHTML = "Follow";
                     
                     // Decrease number of followers in case that the logged in user
                     // visiting the page of his following
                     if(document.querySelector('.edit_button')){
-                        document.querySelector('.followers').textContent =
-                        parseInt(document.querySelector('.followers').textContent) - 1;
+                        document.querySelector('.following').textContent =
+                        parseInt(document.querySelector('.following').textContent) - 1;
                     }
     
                 }
