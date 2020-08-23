@@ -9,31 +9,97 @@
 {% load static %}
 {% block extraStyle %}
     <link rel="stylesheet" href="{% static 'pages/home.css' %}">
-    <link rel="stylesheet" href="{% static 'css/user_following.css' %}">
+        <link rel="stylesheet" href="{% static 'css/user-profile.css' %}">
+        <link rel="stylesheet" href="{% static 'css/user_following.css' %}">
 {% endblock extraStyle %}
 
 {% block content %}
-    <div class="header_user_following">    
-        <h5 class="header_user">{{ user_following.first_name }} {{ user_following.last_name}} following: {{ user_following.following.count }}</h5>
-        <h5 class="header_username" style="color: gray">@{{ user_following.username }}</h5>
+    <div class='containter p-4 profile-container'>
+        <div class='row justify-content-between d-flex flex-nowrap'>
+            <div class='col-sm-auto d-flex align-middle'></dev>
+                <img class='user_image' src="{{ user_following.image.url }}">
+            <div class= 'user_info'>
+                <div class='username_follow_button'>
+                    <p class='user_username  username_container owner' data-username="{{user_following.username}}"><a href="{% url 'user-profile' user_following.username %} "  class='user_link user_full_name'>{{user_following.first_name}} {{user_following.last_name}}</a> @{{user_following.username}}</p>
+                </div> 
+
+                <!-- <p class='user_username user-info' data-username="{{user_following.username}}"><span class='user_full_name'>{{user_following.first_name}} {{user_following.last_name}}</span> @{{user_following.username}}</p> -->
+                <span class='user_username '>
+                    <a class='user_follow_count' href="{% url 'user-followed_by' user_following.username %}">
+                        <span>Followers: </span><span class='followers'>{{ user_following.followed_by.count }}</span>
+                    </a>
+                </span>
+                <span class='user_username  ml-4'>
+                    <span class='current_follow_count'>
+                        <span >Following: </span><span class='following'>{{ user_following.following.count }}</span>
+                    </span>
+                </span>
+                        </div>
+                    </div>            
+                    
+            <div class='d-flex align-items-start '>
+                {% if request.user.is_authenticated %}
+                    {% if user_following != request.user %}
+                        {% if request.user in user_following.followed_by.all %}
+                            <button class='btn owner_follow_button unfollow'>Unfollow</button>
+                        {% else %}
+                            <button class='btn owner_follow_button follow'>Follow</button>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
+
     </div>
+        <div class='row justify-content-between d-flex flex-nowrap'>
+            <div class='bio'>
+            <div class='col-sm-auto'>
+
+                    <p class='joined '>Joined <span class='date_join'>{{user_following.date_joined}}</span></p>
+                
+                    <p class='joined'> 
+                        {% if user_following.gender == 1 %}
+                            Male
+                        {% elif user_following.gender == 2 %}
+                            Female
+                        {% endif %}
+                    </p>
+
+            {% if user_following.bio %}
+                <p class='bio_text'>{{ user_following.bio }}</p>
+            {% endif %}
+        </div>
+
+
+    </div> 
+    <div class='d-flex flex-no-wrap align-items-end'>
+        {% if user_following == request.user %}
+            <a  href="{% url 'edit_profile' %}" class='btn edit_button'>Edit Profile</a>
+        {% elif request.user in user_following.following.all %}
+            <p class='follows_you_text'>{{user_following.first_name}} {{user_following.last_name}} follows you</p>
+        {% endif %}
+   </div>
+        </div>
+    
+    </div>
+    <div class="header_user_following">    
+        <p class="header_user">{{ user_following.first_name }} {{ user_following.last_name}} is following: {{ user_following.following.count }}</p>
     
     <div class='following_links'>
         {% for user_to_follow in user_following.following.all %}
             <div class='container user_container' data-username="{{ user_to_follow.username }}">
-                <div class='row'>
-                    <div class='col-xl-1 col-lg-1 col-md-2 col-sm-2 col-2'>
+                <div class='row d-flex flex-nowrap'>
+                    <div class='col-sm-auto image_container'>
                         <img class='username_image' src="{{ user_to_follow.image.url }}">
                     </div>
-                    <div class='col-xl-11 col-lg-11 col-md-10 col-sm-10 col-10'>
-                        <div class='row'>
-                            <div class='col-xl-10 col-lg-9 col-md-8 col-sm-7 col-7'>
-                                <a href="{% url 'user-profile' user_to_follow.username %}" class='user_link'>
+                    <div class='col-sm-auto name_follow_container'>
+                        <div class='row justify-content-between d-flex flex-nowrap'>
+                            <div class='col-sm-auto'>
+                                <a href="{% url 'user-profile' user_to_follow.username %}" class='user_link user_tofollow_name'>
                                     {{ user_to_follow.first_name }} {{ user_to_follow.last_name }}
                                 </a>
-                                <p class='user_username'>@{{ user_to_follow.username }}</p>
+                                <p class='user_username user_tofollow_username'>@{{ user_to_follow.username }}</p>
                             </div>
-                            <div class='col-xl-2 col-lg-3 col-md-4 col-sm-5 col-5'>
+                            <div class='d-flex align-items-start'>
                                 {% if request.user.is_authenticated %}
                                     {% if request.user != user_to_follow %}
                                         {% if request.user in user_to_follow.followed_by.all %}
@@ -46,7 +112,7 @@
                             </div>
                         </div>
                         <div class='row'>
-                            <div class='col-12'>
+                            <div class='col-sm-auto user_tofollow_bio'>
                                 {% if user_to_follow.bio %}
                                     {{ user_to_follow.bio}}
                                 {% endif %}
@@ -55,6 +121,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         {% endfor %}
     </div>
