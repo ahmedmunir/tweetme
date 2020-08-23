@@ -23,7 +23,7 @@ if(document.querySelector('.follow_button')){
         
             let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/follow/`;
             let data = new FormData();
-            let state = document.querySelector('.follow_button').innerHTML;
+            let state = follow_button.innerHTML;
             let target = e.target.closest('.user_container').dataset.username;
             data.append('state', state);
             data.append('target', target);

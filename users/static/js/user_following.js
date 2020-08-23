@@ -19,12 +19,13 @@ const getCookie =  name =>  {
 // Follow or UnFollow
 if(document.querySelector('.follow_button')){
     document.querySelectorAll('.follow_button').forEach(follow_button => {
+        console.log(follow_button);
         follow_button.addEventListener('click', e => {
             e.preventDefault();
         
             let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/follow/`;
             let data = new FormData();
-            let state = document.querySelector('.follow_button').innerHTML;
+            let state = follow_button.innerHTML;
             let target = e.target.closest('.user_container').dataset.username;
             data.append('state', state);
             data.append('target', target);
@@ -42,6 +43,7 @@ if(document.querySelector('.follow_button')){
                 
                 // If follow process succeded 
                 if(data['state'] == 'follow') {
+                    console.log('Entered Follow');
                     follow_button.classList.remove('follow');
                     follow_button.classList.add('unfollow');
                     follow_button.innerHTML = "Unfollow";
