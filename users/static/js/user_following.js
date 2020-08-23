@@ -46,9 +46,13 @@ if(document.querySelector('.follow_button')){
                     document.querySelector('.follow_button').classList.add('unfollow');
                     document.querySelector('.follow_button').innerHTML = "Unfollow";
                     
-                    // Increase number of followers
-                    document.querySelector('.followers').textContent =
-                    parseInt(document.querySelector('.followers').textContent) + 1;
+                    // Increase number of followers in case that the logged in user
+                    // visiting the page of his following
+                    if(document.querySelector('.edit_button')){
+                        document.querySelector('.followers').textContent =
+                        parseInt(document.querySelector('.followers').textContent) + 1;
+                    }
+
                 }
         
                 // If unfollow process succeded
@@ -57,13 +61,64 @@ if(document.querySelector('.follow_button')){
                     document.querySelector('.follow_button').classList.remove('unfollow');
                     document.querySelector('.follow_button').innerHTML = "Follow";
                     
-                    // Decrease number of followers
-                    document.querySelector('.followers').textContent =
-                    parseInt(document.querySelector('.followers').textContent) - 1;
+                    // Decrease number of followers in case that the logged in user
+                    // visiting the page of his following
+                    if(document.querySelector('.edit_button')){
+                        document.querySelector('.followers').textContent =
+                        parseInt(document.querySelector('.followers').textContent) - 1;
+                    }
     
                 }
             })
         })
     })
 
+}
+
+// Follow or UnFollow for the owner of followers page
+if(document.querySelector('.owner_follow_button')){
+    document.querySelector('.owner_follow_button').addEventListener('click', e => {
+        e.preventDefault();
+    
+        let url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/follow/`;
+        let data = new FormData();
+        let state = document.querySelector('.follow_button').innerHTML;
+        let target = e.target.closest('.user_container').dataset.username;
+        data.append('state', state);
+        data.append('target', target);
+    
+        fetch(url, {
+            method: 'POST',
+            body: data,
+    
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            
+            // If follow process succeded 
+            if(data['state'] == 'follow') {
+                document.querySelector('.owner_follow_button').classList.remove('follow');
+                document.querySelector('.owner_follow_button').classList.add('unfollow');
+                document.querySelector('.owner_follow_button').innerHTML = "Unfollow";
+                
+                // Increase number of followers for the owner of followers page
+                document.querySelector('.followers').textContent =
+                parseInt(document.querySelector('.followers').textContent) + 1;
+            }
+    
+            // If unfollow process succeded
+            else if(data['state'] == 'unfollow') {
+                document.querySelector('.owner_follow_button').classList.add('follow');
+                document.querySelector('.owner_follow_button').classList.remove('unfollow');
+                document.querySelector('.owner_follow_button').innerHTML = "Follow";
+                
+                // Decrease number of followers for the owner of followers page
+                document.querySelector('.followers').textContent =
+                parseInt(document.querySelector('.followers').textContent) - 1;
+            }
+        })
+    })
 }
