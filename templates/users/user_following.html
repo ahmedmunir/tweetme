@@ -82,7 +82,7 @@
     
     </div>
     <div class="header_user_following">    
-        <p class="header_user">{{ user_following.first_name }} {{ user_following.last_name}} is following: {{ user_following.following.count }}</p>
+        <p class="header_user">{{ user_following.first_name }} {{ user_following.last_name}} is following: <span class="p_user_following">{{ user_following.following.count }}</span></p>
     
     <div class='following_links'>
         {% for user_to_follow in user_following.following.all %}

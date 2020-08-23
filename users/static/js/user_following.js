@@ -19,7 +19,6 @@ const getCookie =  name =>  {
 // Follow or UnFollow
 if(document.querySelector('.follow_button')){
     document.querySelectorAll('.follow_button').forEach(follow_button => {
-        console.log(follow_button);
         follow_button.addEventListener('click', e => {
             e.preventDefault();
         
@@ -43,7 +42,6 @@ if(document.querySelector('.follow_button')){
                 
                 // If follow process succeded 
                 if(data['state'] == 'follow') {
-                    console.log('Entered Follow');
                     follow_button.classList.remove('follow');
                     follow_button.classList.add('unfollow');
                     follow_button.innerHTML = "Unfollow";
@@ -53,6 +51,8 @@ if(document.querySelector('.follow_button')){
                     if(document.querySelector('.edit_button')){
                         document.querySelector('.following').textContent =
                         parseInt(document.querySelector('.following').textContent) + 1;
+                        document.querySelector('.p_user_following').textContent = 
+                        parseInt(document.querySelector('.p_user_following').textContent) + 1;
                     }
 
                 }
@@ -68,6 +68,8 @@ if(document.querySelector('.follow_button')){
                     if(document.querySelector('.edit_button')){
                         document.querySelector('.following').textContent =
                         parseInt(document.querySelector('.following').textContent) - 1;
+                        document.querySelector('.p_user_following').textContent = 
+                        parseInt(document.querySelector('.p_user_following').textContent) - 1;
                     }
     
                 }

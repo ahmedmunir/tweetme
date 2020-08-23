@@ -106,6 +106,8 @@ if(document.querySelector('.owner_follow_button')){
                 // Increase number of followers for the owner of followers page
                 document.querySelector('.followers').textContent =
                 parseInt(document.querySelector('.followers').textContent) + 1;
+                document.querySelector('.p_user_followers').textContent =
+                parseInt(document.querySelector('.p_user_followers').textContent) + 1;
             }
     
             // If unfollow process succeded
@@ -117,6 +119,8 @@ if(document.querySelector('.owner_follow_button')){
                 // Decrease number of followers for the owner of followers page
                 document.querySelector('.followers').textContent =
                 parseInt(document.querySelector('.followers').textContent) - 1;
+                document.querySelector('.p_user_followers').textContent =
+                parseInt(document.querySelector('.p_user_followers').textContent) - 1;                
             }
         })
     })
